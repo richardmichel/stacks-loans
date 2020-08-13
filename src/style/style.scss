@@ -1,0 +1,174 @@
+/* The following block can be included in a custom.scss */
+
+/* make the customizations */
+//$theme-colors: (
+//        "info": tomato,
+//        "danger": teal
+//);
+
+$blue: #4c68ef;//primary
+//$green:   #46b04a;//success
+//$red : #E70000;// danger
+//$yellow: #FDA12D;// warning
+//$gray-100: #eff3f9;//light
+$gray-800: #000; //dark
+
+//$black : #000;
+$teal: #5fd9f9;
+@import url('https://rsms.me/inter/inter.css');
+
+
+$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-monospace: "Inter", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+
+/* import bootstrap to set changes */
+$my-minimal-grey: #f7f7f7;
+$my-white: #fff;
+$minimal-blue : #edf4fd;
+
+@import "~bootstrap/scss/bootstrap";
+
+
+
+/*Layout*/
+
+html {
+  font-family: 'Inter', sans-serif;
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: 'Inter var', sans-serif;
+  }
+}
+
+
+
+html, body, #root {
+  min-height: 100% !important;
+  font-family: 'Inter', sans-serif;
+  font-size: medium;
+}
+
+body {
+  background-color: $minimal-blue;
+  display: block;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#logo {
+  vertical-align: middle;
+}
+
+.navbar-brand span {
+  font-size: 2rem;
+  line-height: 1.2;
+  font-weight: 200;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 0 0 15px;
+}
+
+.navbar-brand b {
+  display: block;
+  font-size: 50%;
+  line-height: 1;
+}
+
+.navbar-nav {
+  margin-left: auto;
+}
+
+/*logo*/
+
+
+/** footer */
+
+footer.page-footer {
+  bottom: 0;
+  color: $my-white;
+}
+
+footer.page-footer a {
+  color: $my-white;
+}
+
+footer.page-footer .footer-legal {
+  overflow: hidden;
+  color: $my-white;
+}
+
+footer {
+  margin-top: -1px;
+  display: block;
+
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand > img {
+  padding: 7px 14px;
+}
+
+
+.pt-12,
+.py-12 {
+  padding-top: 7rem !important;
+}
+
+.pb-12,
+.py-12 {
+  padding-bottom: 7rem !important;
+}
+
+.pt-3,
+.py-3 {
+  padding-top: 1rem !important;
+}
+
+.pb-3,
+.py-3 {
+  padding-bottom: 1rem !important;
+}
+
+
+.mt-5,
+.my-5 {
+  margin-top: 3rem !important;
+}
+
+.mr-5,
+.mx-5 {
+  margin-right: 3rem !important;
+}
+
+.mb-5,
+.my-5 {
+  margin-bottom: 3rem !important;
+}
+
+
+.mt-10,
+.my-10 {
+  margin-top: 6rem !important;
+}
+
+.mr-10,
+.mx-10 {
+  margin-right: 6rem !important;
+}
+
+.mb-10,
+.my-10 {
+  margin-bottom: 6rem !important;
+}
+
+.unique-color-dark {
+  background-color: $gray-800 !important;
+}
+
