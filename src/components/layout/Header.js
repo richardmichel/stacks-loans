@@ -6,7 +6,7 @@ import MyLogo from '@assets/imgs/blockstack_logo.svg';
 
 // others components
 import {Navbar, Container, Nav, NavDropdown, Button, Modal} from 'react-bootstrap';
-import {useTranslation} from 'react-i18next';
+//import {useTranslation} from 'react-i18next';
 //import { useHistory } from "react-router-dom";
 
 // store
@@ -27,7 +27,7 @@ const {useContext, useState} = React;
 export default function HeaderComponent() {
 
     //const history = useHistory();
-    const [t] = useTranslation();
+   // const [t] = useTranslation();
     const {state, dispatch} = useContext(AdminStore);
     const {user} = state;
 

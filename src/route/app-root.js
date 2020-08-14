@@ -9,17 +9,16 @@ import HeaderComponent from '@components/layout/Header';
 
 import Loader from '@components/ui/Loader';
 import useDocumentTitle from "@utils/useDocumentTitle";
-import {Container, Navbar} from "react-bootstrap";
 // store
 import {AdminStore} from "@store/admin-store"
 
 
 const authed = false;
 const authPath = '/';
-const {useContext, useState} = React;
+const {useContext} = React;
 
 export default function AppRoot(props) {
-    const {state, dispatch} = useContext(AdminStore);
+    const {state} = useContext(AdminStore);
     // set Title
     useDocumentTitle("Stacks Loans");
     return (
