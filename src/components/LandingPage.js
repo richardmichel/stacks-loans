@@ -1,10 +1,11 @@
 import * as React from 'react';
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col'
+
 import {useTranslation} from 'react-i18next';
-import Button from 'react-bootstrap/Button'
+
+// others components
+import { Container,Row,  Col, Button} from 'react-bootstrap';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
@@ -18,7 +19,8 @@ function LandingPage(props) {
 
     return (
         <React.Fragment>
-            <Container className="mt-10">
+            <Container>
+            <div className="mt-10">
                 <Row className="justify-content-md-center">
                     <Col lg="12">
                         <h2>  {t('landingPage:label1')} </h2>
@@ -37,6 +39,7 @@ function LandingPage(props) {
                         </Row>
                     </Col>
                 </Row>
+            </div>
             </Container>
         </React.Fragment>
     )

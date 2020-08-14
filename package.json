@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@blockstack/connect": "^2.11.0",
+    "@blockstack/connect": "^2.5.0-alpha.1",
     "@blockstack/stacks-transactions": "^0.6.0-test.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-regular-svg-icons": "^5.14.0",
