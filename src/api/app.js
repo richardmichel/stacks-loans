@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Mongoose Connection
 try {
-  const database_url = "mongodb://mongoadmin:7bpqpny4r@localhost:27017";
+  const database_url = "mongodb://localhost:27017";
   mongoose.connect(database_url, {
     useCreateIndex: true,
     useNewUrlParser: true,
