@@ -7,11 +7,11 @@ import {BrowserRouter as Router} from "react-router-dom";
 import {renderRoutes} from 'react-router-config';
 
 //blockstack  connect
-import {UserSession} from 'blockstack';
+//import {UserSession} from 'blockstack';
 import {Connect} from '@blockstack/connect';
 
 //settings
-import {appConfig} from '@config/settings';
+//import {appConfig} from '@config/settings';
 import routes from '@route/routes';
 
 // store
@@ -19,14 +19,15 @@ import {AdminStore} from "@store/admin-store";
 //actions
 import {setLogin} from "@actions/actions";
 
-const userSession = new UserSession({appConfig});
+//const userSession = new UserSession({appConfig});
 const urlIcon = 'http://oflisback.github.io/react-favicon/public/img/github.ico';
 const {useContext, useEffect} = React;
 
 
 export default function App(props) {
 
-    const { dispatch} = useContext(AdminStore);
+    const {state, dispatch} = useContext(AdminStore);
+    const { userSession } = state;
 
     const authOptions = {
         redirectTo: '/',
