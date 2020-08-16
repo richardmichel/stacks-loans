@@ -1,11 +1,15 @@
-
+//blockstack  connect
+import {UserSession} from 'blockstack';
+//settings
+import {appConfig} from '@config/settings';
 
 export const initialState = {
     isAuth: false,
-    user: {
-        username : null
-    },
-    pathName: "/"
+    user: {},
+    pathName: "/",
+    userSession: new UserSession({ appConfig }),
+    userData: {}, // coming from Blockstack
+    currentUser: {}, // coming from your API
 };
 
 export const reducer = (state, action) => {
@@ -19,7 +23,7 @@ export const reducer = (state, action) => {
          case 'LOGOUT':
             return { ...state, isAuth: false, user: null };
         case 'LOGIN':
-            return { ...state, isAuth: true, user: action.payload };
+            return { ...state, isAuth: true, user: action.payload, userData: action.payload };
         default:
             return state
     }

@@ -2,7 +2,77 @@ import * as React from 'react';
 
 import {Card, Button, Row, Col, Container, Image, ProgressBar} from 'react-bootstrap';
 import BlockStackIcon from '@assets/imgs/blockstack-icon.png';
+// store
+import {AdminStore} from "@store/admin-store";
+
+const {useContext, useState} = React;
+
+const useExample = _ =>{
+
+};
+
+
 function DashBoard() {
+
+    const {  superhero, setSuperHero } = useState("");// I'M NEW coming from form input
+    const {  gaiaUser, setGaiaUser } = useState("");// I'M NEW coming from Gaia Storage
+    const {  crush, setCrush } = useState("");// I'M NEW coming from form input
+
+    const {state, dispatch} = useContext(AdminStore);
+    const { userSession,currentUser } = state;
+
+    /*
+
+    // I'M NEW
+    const changeHandler = e => {
+        this.setState({ [e.target.name]: e.target.value });
+    };
+
+    // I'M NEW, standard fetch method
+    const submitHandler = e => {
+       // const { superhero, currentUser } = this.state;
+       // e.preventDefault();
+
+        // be sure to add the superhero attribute to the backend
+        fetch(`http://localhost:3000/api/v1/users/${currentUser.id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json"
+            },
+            body: JSON.stringify({
+                superhero
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                this.setState({ currentUser: data });
+                console.log("API", data); // see that the data transferred
+            });
+    };
+
+    // I'M NEW, putFile is a method provided by the Blockstack library
+    const submitGaiaHandler = e => {
+       // const { userSession, crush } = this.state;
+        const user = { crush: crush };
+        let options = { encrypt: true };
+
+        e.preventDefault();
+
+        // encrypt and securely send your secret crush to Gaia Storage
+        userSession
+            .putFile("user.json", JSON.stringify(user), options)
+            .then(data => {
+                this.setState({ gaiaUser: user });
+                console.log("Gaia Storage", data); // see that the data is encrypted
+            });
+
+        // note that at this time, Blockstack only allows PUT but not PATCH
+        // you are replacing the entire gaiaUser object
+    };
+    */
+
+
     return (
         <React.Fragment>
             <Container>
@@ -70,7 +140,7 @@ function DashBoard() {
                                             STX
                                         </Card.Title>
                                         <Card.Text className="sampleBox-footer">
-                                            <h5>$3,254.00</h5>
+                                            <span className="title">$3,254.00</span>
                                             <small>4.12 STX</small>
                                         </Card.Text>
                                     </Card.Body>
@@ -90,7 +160,7 @@ function DashBoard() {
                                             STX
                                         </Card.Title>
                                         <Card.Text className="sampleBox-footer">
-                                            <h5>$3,254.00</h5>
+                                            <span className="title">$3,254.00</span>
                                             <small>4.12 STX</small>
                                         </Card.Text>
                                     </Card.Body>
@@ -109,7 +179,7 @@ function DashBoard() {
                                             STX
                                         </Card.Title>
                                         <Card.Text className="sampleBox-footer">
-                                            <h5>$3,254.00</h5>
+                                            <span className="title">$3,254.00</span>
                                             <small>4.12 STX</small>
                                         </Card.Text>
                                     </Card.Body>
@@ -128,7 +198,7 @@ function DashBoard() {
                                             STX
                                         </Card.Title>
                                         <Card.Text className="sampleBox-footer">
-                                            <h5>$3,254.00</h5>
+                                            <span className="title">$3,254.00</span>
                                             <small>4.12 STX</small>
                                         </Card.Text>
                                     </Card.Body>
@@ -148,7 +218,7 @@ function DashBoard() {
                             >
                             <Card.Body>
                                 <Card.Text>
-                                    <h5 className="color-blank">0.069%</h5>
+                                    <span className="title color-blank">0.069%</span>
                                     <small className="color-light-purple">maker</small>
                                 </Card.Text>
                                 <ProgressBar variant="info" now={20} />

@@ -3,10 +3,10 @@ import {Link, NavLink} from 'react-router-dom'
 
 
 import MyLogo from '@assets/imgs/blockstack_logo.svg';
-
+import ShowProfile from '@components/dashboard/ShowProfile';
 // others components
 import {Navbar, Container, Nav, NavDropdown, Button, Modal} from 'react-bootstrap';
-import {useTranslation} from 'react-i18next';
+//import {useTranslation} from 'react-i18next';
 //import { useHistory } from "react-router-dom";
 
 // store
@@ -27,7 +27,7 @@ const {useContext, useState} = React;
 export default function HeaderComponent() {
 
     //const history = useHistory();
-    const [t] = useTranslation();
+   // const [t] = useTranslation();
     const {state, dispatch} = useContext(AdminStore);
     const {user} = state;
 
@@ -49,6 +49,7 @@ export default function HeaderComponent() {
         return (
             <React.Fragment>
             <FontAwesomeIcon className="link-disabled-color" icon={faUser}/>
+                <ShowProfile  {...user} />
                 <NavDropdown title={user.username} id="nav-dropdown">
                     <NavDropdown.Item eventKey="4.4" onClick={() => handleSignOut()}>
                         SignOut
