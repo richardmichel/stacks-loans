@@ -12,6 +12,7 @@ import MyLogo from '@assets/imgs/blockstack_logo.svg';
 import {AdminStore} from "@store/admin-store"
 //actions
 import {setLogout} from "@actions/actions";
+import {Person} from "blockstack/lib";
 
 const userSession = new UserSession({appConfig});
 const {useContext, useState, useRef} = React;
@@ -22,11 +23,15 @@ export default function HeaderComponent() {
 
     const {state, dispatch} = useContext(AdminStore);
     const {currentUser} = state;
+    const {profile, username} = state.userData;
+
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const person = new Person(profile)
 
     const handleSignOut = _ => {
+        handleClose();
         setLogout(dispatch);
         userSession.signUserOut(window.location.origin);
     };
@@ -34,8 +39,7 @@ export default function HeaderComponent() {
         return (
             <React.Fragment>
             <FontAwesomeIcon className="link-disabled-color" icon={faUser}/>
-
-                <NavDropdown title={currentUser.username ? currentUser.username : 'User'} id="nav-dropdown">
+                <NavDropdown title={(person && person.name()) || username || 'User'} id="nav-dropdown">
                     <NavDropdown.Item eventKey="4.4" onClick={() => handleShow()} >
                         SignOut
                     </NavDropdown.Item>
@@ -47,9 +51,10 @@ export default function HeaderComponent() {
         return (
             <React.Fragment>
                 <Nav.Item>
-                <Nav.Link eventKey="/"
+                <Nav.Link eventKey="1"
                           as={NavLink}
-                          to='/'>DASHBOARD</Nav.Link>
+                          to='/'
+                          exact> {state.isAuth ? 'Home': 'DASHBOARD'}</Nav.Link>
                 </Nav.Item>
             </React.Fragment>
         );
@@ -74,23 +79,19 @@ export default function HeaderComponent() {
                         <span>
 
                     </span>
-
-
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
-
-
-
                     <Navbar.Collapse id="responsive-navbar-nav">
+
                         <Nav className="mr-auto link-border-left"
-                             activeKey="/">
-                            {state.isAuth ? showMenu() : '' }
+                             defaultActiveKey="2">
+                            {showMenu() }
 
                             <Nav.Item>
-                                <Nav.Link eventKey="ABOUT"
+                                <Nav.Link eventKey={2}
                                           className="link-disabled-color"
                                           as={NavLink}
-                                          to='/' exact>ABOUT</Nav.Link>
+                                          to='/about' exact>ABOUT</Nav.Link>
                             </Nav.Item>
 
                         </Nav>

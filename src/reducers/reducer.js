@@ -13,10 +13,6 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
-
-    console.log("action.type:", action.type);
-
-
     switch (action.type) {
         case "SET_PATH_NAME":
             return { ...state, pathName: action.payload };

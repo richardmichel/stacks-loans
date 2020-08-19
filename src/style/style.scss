@@ -1,25 +1,20 @@
 /* The following block can be included in a custom.scss */
 
-/* make the customizations */
-//$theme-colors: (
-//        "info": tomato,
-//        "danger": teal
-//);
 
 $blue: #3700ff; //primary
-$green: #46b04a; //success
-//$red : #E70000;// danger
-//$yellow: #FDA12D;// warning
-//$gray-100: #eff3f9;//light
+//$green: #46b04a; //success
+$red: #E70000; // danger
+$yellow: #FDA12D; // warning
+/*
+$gray-100: #eff3f9;//light
 $gray-800: #000; //dark
-
-//$black : #000;
-//$teal: #5fdaf9;
+$black : #000;
+$teal: #0c3841;
 $cyan : #5fdaf9;
-
+*/
 $blank: #000;
 $minimal-purple: #667c96;
-$light-purple:  #8c9eb2;
+$light-purple: #8c9eb2;
 @import url('https://rsms.me/inter/inter.css');
 
 
@@ -70,36 +65,14 @@ body {
   color: $link-disabled-color;
 
 }
-.link-border-left{
+
+.link-border-left {
   border-left: 1px solid #f3eff1;
 }
 
-.link-border-right{
+.link-border-right {
   border-right: 1px solid #f3eff1;
 }
-/*
-.navbar-brand span {
-  font-size: 1rem;
-  line-height: 1.2;
-  font-weight: 300;
-  display: inline-block;
-  vertical-align: middle;
-  padding: 0 0 0 15px;
-  color : $gray-800;
-}
-
-.navbar-brand b {
-  display: block;
-  font-size: 50%;
-  line-height: 1;
-}
-
-.navbar-nav {
-  margin-left: auto;
-}*/
-
-/*logo*/
-
 
 /** footer */
 
@@ -211,7 +184,7 @@ $vs-text: 255, 255, 255;
 /*.navbar-brand > img {
   padding: 7px 14px;
 }*/
-.my-first-dashboard{
+.my-first-dashboard {
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
 }
@@ -231,46 +204,54 @@ $vs-text: 255, 255, 255;
 }
 
 .shadow-md-up {
-  box-shadow: 0 -1.5rem 1.3rem  rgba(0, 0, 0, 0.175) !important;
+  box-shadow: 0 -1.5rem 1.3rem rgba(0, 0, 0, 0.175) !important;
 }
 
 .shadow-md-left {
   box-shadow: -0.5rem 0 1.3rem rgba(0, 0, 0, 0.175) !important;
 }
+
 .shadow-md-right {
   box-shadow: 0.5rem 0 1.3rem rgba(0, 0, 0, 0.175) !important;
 }
 
 
-
 .shadow-md-bottom {
   box-shadow: 0 0.5rem 1.3rem rgba(0, 0, 0, 0.175) !important;
 }
+
 .shadow-minimal {
-  box-shadow: 0 0 0.2rem rgba(0,0,0,.175) !important;
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, .175) !important;
 }
 
-.color-white{
+.inline-block {
+  display: inline-block;
+}
+
+.color-white {
   color: $white;
 }
 
-.color-blank{
+.color-blank {
   color: $blank
 }
-.color-minimal-purple{
+
+.color-minimal-purple {
   color: $minimal-purple;
 }
-.color-light-purple{
+
+.color-light-purple {
   color: $light-purple;
 }
 
-.sampleBox{
+.sampleBox {
   height: 15rem;
   border-radius: 1.5rem;
   box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
 }
-.sampleBox-one{
-  background: linear-gradient( rgba(250, 111, 53, 0.84), rgba(248, 184, 25, 0.98)), url("/pattern.png");
+
+.sampleBox-one {
+  background: linear-gradient(rgba(250, 111, 53, 0.84), rgba(248, 184, 25, 0.98)), url("/pattern.png");
   min-height: 100%;
   background-size: cover;
   background-position: 50% 0;
@@ -279,13 +260,13 @@ $vs-text: 255, 255, 255;
 
 }
 
-.sampleBox-footer{
+.sampleBox-footer {
   position: absolute;
   bottom: 1rem;
 }
 
-.sampleBox-two{
-  background: linear-gradient( rgba(66, 105, 255, 0.84), rgba(69, 175, 255, 0.84)), url("/pattern.png");
+.sampleBox-two {
+  background: linear-gradient(rgba(66, 105, 255, 0.84), rgba(69, 175, 255, 0.84)), url("/pattern.png");
   min-height: 100%;
   background-size: cover;
   background-position: 50% 0;
@@ -293,16 +274,16 @@ $vs-text: 255, 255, 255;
   border: none;
 }
 
-.sampleBox-three{
-  background: linear-gradient( rgba(42, 172, 234, 0.8), rgba(91, 231, 254, 0.8)), url("/pattern.png");
+.sampleBox-three {
+  background: linear-gradient(rgba(42, 172, 234, 0.8), rgba(91, 231, 254, 0.8)), url("/pattern.png");
   min-height: 100%;
   background-size: cover;
   background-position: 50% 0;
   border: none;
 }
 
-.sampleBox-four{
-  background: linear-gradient( rgba(69, 209, 160, 0.74), rgba(73, 224, 100, 0.8)), url("/pattern.png");
+.sampleBox-four {
+  background: linear-gradient(rgba(69, 209, 160, 0.74), rgba(73, 224, 100, 0.8)), url("/pattern.png");
   min-height: 100%;
   background-size: cover;
   background-position: 50% 0;
@@ -416,6 +397,7 @@ $vs-text: 255, 255, 255;
 .py-10 {
   padding-top: 6rem !important;
 }
+
 .pt-12,
 .py-12 {
   padding-top: 7rem !important;
@@ -437,6 +419,7 @@ $vs-text: 255, 255, 255;
 .py-10 {
   padding-bottom: 6rem !important;
 }
+
 .pt-12,
 .py-12 {
   padding-top: 7rem !important;

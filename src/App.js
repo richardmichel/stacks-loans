@@ -13,12 +13,6 @@ import routes from '@route/routes';
 import {AdminStore} from "@store/admin-store";
 //actions
 import {setLogin} from "@actions/actions";
-
-// services
-import {ServiceFactory} from '@services/ServiceFactory';
-const UserService = ServiceFactory.get('user');
-
-
 const urlIcon = 'http://oflisback.github.io/react-favicon/public/img/github.ico';
 const {useContext, useEffect} = React;
 
@@ -29,7 +23,7 @@ export default function App(props) {
     const {userSession} = state;
 
     const authOptions = {
-
+        redirectTo: '/',
         finished: ({userSession}) => {
             const userData = userSession.loadUserData();
             setLogin(userData, dispatch);

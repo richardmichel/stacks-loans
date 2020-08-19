@@ -9,10 +9,10 @@ import {
   deserializeCV,
   serializeCV,
 } from '@blockstack/stacks-transactions';
-//import { STX_JSON_PATH } from './UserSession';
+
 
 import { standardPrincipalCV } from '@blockstack/stacks-transactions';
-const STX_JSON_PATH = 'stx_stack_loans.json';
+const STX_JSON_PATH = 'stx_stacks_loans.json';
 export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
@@ -20,8 +20,7 @@ export const CONTRACT_ADDRESS = 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8';
 
 export const STACK_API_URL = 'https://sidecar.staging.blockstack.xyz';
 export const STACKS_API_ACCOUNTS_URL = `${STACK_API_URL}/v2/accounts`;
-export const STACKS_API_ACCOUNTS_BROWSER_URL =
-  'http://testnet-master.blockstack.org:20443/v2/accounts';
+//export const STACKS_API_ACCOUNTS_BROWSER_URL = 'http://testnet-master.blockstack.org:20443/v2/accounts';
 
 export function getStacksAccount(appPrivateKey) {
   const privateKey = createStacksPrivateKey(appPrivateKey);
@@ -35,6 +34,56 @@ export function getStacksAccount(appPrivateKey) {
   return { privateKey, address };
 }
 
+export function fetchHodlTokenBalance(sender) {
+    console.log("fetchHodlTokenBalance sender:", sender);
+//    let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/hold-token/hodl-balance-of`;
+
+    let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/hold-token/hodl-balance-of`;
+
+
+    return fetch(
+        url,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: `{"sender":"${sender}","arguments":[${serializeCV(new standardPrincipalCV(sender))}]}`,
+        }
+    )
+        .then(response => response.json())
+        .then(hodlBalanceOf => {
+            console.log({ hodlBalanceOf });
+            if (hodlBalanceOf.okay) {
+                const cv = deserializeCV(Buffer.from(hodlBalanceOf.result.substr(2), 'hex'));
+                if (cv.value) {
+                    return cv.value;
+                } else {
+                    return undefined;
+                }
+            }
+        });
+
+}
+export function fetchAccount(addressAsString) {
+    const balanceUrl = `${STACKS_API_ACCOUNTS_URL}/${addressAsString}`;
+    return fetch(balanceUrl).then(r => {
+        console.log({ r });
+        return r.json();
+    });
+}
+
+export function txIdToStatus(txId) {
+    return (
+        <>
+            Check transaction status:{' '}
+            <a href={`https://testnet-explorer.blockstack.org/txid/0x${txId}`}>{txId}</a>
+        </>
+    );
+}
+
+
+/*
 export async function getUserAddress(userSession, username) {
   return userSession
     .getFile(STX_JSON_PATH, {
@@ -45,14 +94,7 @@ export async function getUserAddress(userSession, username) {
     .catch(e => console.log(e, username));
 }
 
-export function fetchAccount(addressAsString) {
-  console.log('Checking account');
-  const balanceUrl = `${STACKS_API_ACCOUNTS_URL}/${addressAsString}`;
-  return fetch(balanceUrl).then(r => {
-    console.log({ r });
-    return r.json();
-  });
-}
+
 
 export function resultToStatus(result) {
   if (result && result.startsWith('"') && result.length === 66) {
@@ -63,14 +105,7 @@ export function resultToStatus(result) {
   }
 }
 
-export function txIdToStatus(txId) {
-  return (
-    <>
-      Check transaction status:{' '}
-      <a href={`https://testnet-explorer.blockstack.org/txid/0x${txId}`}>{txId}</a>
-    </>
-  );
-}
+
 
 export function fetchJackpot(sender) {
   return fetch(
@@ -95,30 +130,6 @@ export function fetchJackpot(sender) {
         }
       }
     });
-}
+}*/
 
-export function fetchHodlTokenBalance(sender) {
-  return fetch(
-    `${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/hold-token/hodl-balance-of`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: `{"sender":"${sender}","arguments":[${serializeCV(new standardPrincipalCV(sender))}]}`,
-    }
-  )
-    .then(response => response.json())
-    .then(hodlBalanceOf => {
-      console.log({ hodlBalanceOf });
-      if (hodlBalanceOf.okay) {
-        const cv = deserializeCV(Buffer.from(hodlBalanceOf.result.substr(2), 'hex'));
-        if (cv.value) {
-          return cv.value;
-        } else {
-          return undefined;
-        }
-      }
-    });
 
-}
