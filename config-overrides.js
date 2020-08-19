@@ -24,6 +24,7 @@ module.exports = override(
         ['@style'] : path.resolve(__dirname, './src/style'),
         ['@store'] : path.resolve(__dirname, './src/store'),
         ['@route'] : path.resolve(__dirname, './src/route'),
+        ['@pages'] : path.resolve(__dirname, './src/pages')
 
 
     })

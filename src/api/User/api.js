@@ -2,6 +2,15 @@ import express from "express";
 import { createUser, findAllUsers, findById, updateUser } from "./User";
 const router = express.Router();
 
+router.get("/", (req, res, next) => {
+
+  res.json({
+    ok : true,
+    message :"It's Home"
+  });
+
+});
+
 router.get("/users", (req, res, next) => {
   findAllUsers((users) => {
     res.json({

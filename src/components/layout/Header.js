@@ -1,57 +1,42 @@
 import * as React from 'react';
 import {Link, NavLink} from 'react-router-dom'
-
-
-import MyLogo from '@assets/imgs/blockstack_logo.svg';
-import ShowProfile from '@components/dashboard/ShowProfile';
-// others components
 import {Navbar, Container, Nav, NavDropdown, Button, Modal} from 'react-bootstrap';
-//import {useTranslation} from 'react-i18next';
-//import { useHistory } from "react-router-dom";
 
-// store
-import {AdminStore} from "@store/admin-store"
-
-//actions
-import {setLogout} from "@actions/actions";
-
-
-//blockstack  connect
 import {UserSession} from 'blockstack';
 import {appConfig} from '@config/settings';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser} from "@fortawesome/free-solid-svg-icons";
+import MyLogo from '@assets/imgs/blockstack_logo.svg';
+
+// store
+import {AdminStore} from "@store/admin-store"
+//actions
+import {setLogout} from "@actions/actions";
 
 const userSession = new UserSession({appConfig});
-const {useContext, useState} = React;
+const {useContext, useState, useRef} = React;
+
 export default function HeaderComponent() {
 
-    //const history = useHistory();
-   // const [t] = useTranslation();
+    const closeModal = useRef();
+
     const {state, dispatch} = useContext(AdminStore);
-    const {user} = state;
-
+    const {currentUser} = state;
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-
-    // const toRedirect = (path) => {
-    //    history.push(path);
-    // };
 
     const handleSignOut = _ => {
         setLogout(dispatch);
         userSession.signUserOut(window.location.origin);
-    }
+    };
     const showNavDropdown = _ => {
         return (
             <React.Fragment>
             <FontAwesomeIcon className="link-disabled-color" icon={faUser}/>
-                <ShowProfile  {...user} />
-                <NavDropdown title={user.username} id="nav-dropdown">
-                    <NavDropdown.Item eventKey="4.4" onClick={() => handleSignOut()}>
+
+                <NavDropdown title={currentUser.username ? currentUser.username : 'User'} id="nav-dropdown">
+                    <NavDropdown.Item eventKey="4.4" onClick={() => handleShow()} >
                         SignOut
                     </NavDropdown.Item>
                 </NavDropdown>
@@ -65,13 +50,6 @@ export default function HeaderComponent() {
                 <Nav.Link eventKey="/"
                           as={NavLink}
                           to='/'>DASHBOARD</Nav.Link>
-                </Nav.Item>
-
-                <Nav.Item>
-                <Nav.Link eventKey="home"
-                          className="link-disabled-color"
-                          as={NavLink}
-                          to='/' exact>EXCHANGE</Nav.Link>
                 </Nav.Item>
             </React.Fragment>
         );
@@ -107,18 +85,7 @@ export default function HeaderComponent() {
                         <Nav className="mr-auto link-border-left"
                              activeKey="/">
                             {state.isAuth ? showMenu() : '' }
-                            <Nav.Item>
-                                <Nav.Link eventKey="BANK"
-                                          className="link-disabled-color"
-                                          as={NavLink}
-                                          to='/' exact>BANK</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link eventKey="AFFILIATE"
-                                          className="link-disabled-color"
-                                          as={NavLink}
-                                          to='/' exact>AFFILIATE</Nav.Link>
-                            </Nav.Item>
+
                             <Nav.Item>
                                 <Nav.Link eventKey="ABOUT"
                                           className="link-disabled-color"
@@ -129,30 +96,23 @@ export default function HeaderComponent() {
                         </Nav>
                         <Navbar>
                             {state.isAuth ? showNavDropdown() : ''}
-
-                            {
-                                /*
-                                 <Button variant="primary" onClick={handleShow}>
-                                Launch demo modal
-                            </Button>
-                                 */
-                            }
                         </Navbar>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose}  ref={closeModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Confirm</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Body> Log out? </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
+
+                    <Button variant="light" size="lg" onClick={handleSignOut}>
+                        Yes
                     </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
+                    <Button variant="primary" size="lg" onClick={handleClose} >
+                        No
                     </Button>
                 </Modal.Footer>
             </Modal>

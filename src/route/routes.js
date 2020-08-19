@@ -2,7 +2,7 @@
 
 import AppRoot from './app-root';
 import NotFound from '@components/ui/NotFound';
-import Home from '@components/Home';
+import Home from '@pages/Home';
 
 const routes = [
     {

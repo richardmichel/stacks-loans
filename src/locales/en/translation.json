@@ -1,11 +1,5 @@
 {
   "app_name": "Stacks Loans",
   "loading": "Loading",
-  "redirect_back" : "Back",
-  "rules": {
-    "required": "The {{attribute}} field is required."
-  },
-  "message_success": "Success",
-  "message_error": "Error",
-  "message_form_required_error" : "Some fields are required."
+  "redirect_back" : "Back"
 }

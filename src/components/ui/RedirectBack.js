@@ -8,7 +8,7 @@ function  RedirectBack( ) {
     let history = useHistory();
 
     const redirect = (e) =>{
-     //   history.push("/");
+        history.push("/");
     };
     return(
         <button onClick={(e)=>redirect(e)}>
