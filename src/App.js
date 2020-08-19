@@ -1,69 +1,60 @@
-import * as React from 'react';
+import * as React from "react";
 // tools
-import {BrowserRouter as Router} from "react-router-dom";
-import {renderRoutes} from 'react-router-config';
+import { BrowserRouter as Router } from "react-router-dom";
+import { renderRoutes } from "react-router-config";
 
 //blockstack  connect
-import {Connect} from '@blockstack/connect';
+import { Connect } from "@blockstack/connect";
 
 //settings
-import routes from '@route/routes';
+import routes from "@route/routes";
 
 // store
-import {AdminStore} from "@store/admin-store";
+import { AdminStore } from "@store/admin-store";
 //actions
-import {setLogin} from "@actions/actions";
-const urlIcon = 'http://oflisback.github.io/react-favicon/public/img/github.ico';
-const {useContext, useEffect} = React;
-
+import { setLogin } from "@actions/actions";
+const urlIcon = "favicon.ico";
+const { useContext, useEffect } = React;
 
 export default function App(props) {
+  const { state, dispatch } = useContext(AdminStore);
+  const { userSession } = state;
 
-    const {state, dispatch} = useContext(AdminStore);
-    const {userSession} = state;
+  const authOptions = {
+    redirectTo: "/",
+    finished: ({ userSession }) => {
+      const userData = userSession.loadUserData();
+      setLogin(userData, dispatch);
+    },
+    userSession,
+    appDetails: {
+      name: "Stacks Loans",
+      icon: urlIcon,
+    },
+  };
 
-    const authOptions = {
-        redirectTo: '/',
-        finished: ({userSession}) => {
-            const userData = userSession.loadUserData();
-            setLogin(userData, dispatch);
+  useEffect(() => {
+    document.title = "Stacks Loans";
 
-        },
-        userSession,
-        appDetails: {
-            name: 'Stacks Loans',
-            icon: urlIcon,
-        },
+    if (userSession.isSignInPending()) {
+      userSession.handlePendingSignIn().then((userData) => {
+        setLogin(userData, dispatch);
+      });
+    } else if (userSession.isUserSignedIn()) {
+      const userData = userSession.loadUserData();
+      setLogin(userData, dispatch);
+    }
 
-    };
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-
-    useEffect(() => {
-        document.title = "Stacks Loans";
-
-        if (userSession.isSignInPending()) {
-
-            userSession.handlePendingSignIn().then(userData => {
-                setLogin(userData, dispatch);
-            });
-        } else if (userSession.isUserSignedIn()) {
-            const userData = userSession.loadUserData();
-            setLogin(userData, dispatch);
-        }
-
-        return () => {
-
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-
-    return (
-        <Connect authOptions={authOptions}>
-            <Router>
-                {renderRoutes(routes)}
-                {props.children}
-            </Router>
-        </Connect>
-    );
+  return (
+    <Connect authOptions={authOptions}>
+      <Router>
+        {renderRoutes(routes)}
+        {props.children}
+      </Router>
+    </Connect>
+  );
 }
