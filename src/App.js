@@ -83,8 +83,7 @@ export default function App(props) {
 
     };
 
-    // redirectTo: '/',
-    // //icon: window.location.origin + '/logo.svg',
+
     const authOptions = {
 
         finished: ({userSession}) => {
