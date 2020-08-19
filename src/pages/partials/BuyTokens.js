@@ -71,7 +71,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
         <div>
 
             <Card>
-                <Card.Header>Seize Your Stacks</Card.Header>
+                <Card.Header>Please fill form to receive 5% STX per month on your deposit</Card.Header>
                 <Card.Body>
 
 
@@ -121,7 +121,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                         </Form.Group>
 
                         <Button variant="primary" type="submit">
-                            Get Stacks Now
+                            Get loan now
                         </Button>
 
                     </Form>

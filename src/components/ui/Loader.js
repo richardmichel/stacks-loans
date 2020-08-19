@@ -6,12 +6,12 @@ const Loader = () => (
     <ContentLoader
         height={240}
         speed={1}
-        backgroundColor={'#fa6f35d6'}
-        foregroundColor={'#f8b819fa'}
+        backgroundColor={'rgba(83, 115, 115, 0.4)'}
+        foregroundColor={'rgba(72, 135, 123, 0.9)'}
         viewBox="0 0 380 70"
     >
         {/* Only SVG shapes */}
-        <rect x="0" y="0" rx="5" ry="5" width="70" height="70" />
+        <rect x="0" y="0" rx="5" ry="5" width="100" height="70" />
     </ContentLoader>
 )
 export default Loader;

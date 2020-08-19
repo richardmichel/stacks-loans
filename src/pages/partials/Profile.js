@@ -22,11 +22,10 @@ function Profile({stxAddresses, userData}) {
                 <div className="Profile">
 
 
-
                     {status && (
                         <React.Fragment>
                             <br/>
-                            <Alert variant="danger">
+                            <Alert variant="info">
                                 <Alert.Heading>Oh snap!</Alert.Heading>
                                 {status}
                             </Alert>
@@ -35,36 +34,46 @@ function Profile({stxAddresses, userData}) {
                     )}
 
                     <div className="pt-4 title ">
-                        <h5 className="inline-block">Your own Stacks address:</h5>
-                        <StxProfile
-                            stxAddress={stxAddresses.ownerStxAddress}
-                            updateStatus={updateStatus}
-                            showAddress
-                        ></StxProfile>
-                    </div>
 
-                    <Row className="justify-content-md-center">
-                        <Col lg="6">
-                            <div className="pt-4">
-                                <h5>Your Hodl amount for Stacks Loans:</h5>
-                                <br/>
+                        <Row className="justify-content-md-center">
+                            <Col lg="4">
+                                <h5 className="inline-block">Your Stacks Wallet</h5>
                                 <StxProfile
-                                    stxAddress={stxAddresses.appStxAddress}
-                                    updateStatus={updateStatus}
-                                ></StxProfile>
-                            </div>
-                        </Col>
-                        <Col lg="6">
-                            <div className="pt-4">
-                                <h5>Your Hold amount for Stacks Loands Hold tokens:</h5>
-                                <br/>
-                                <HoldTokenProfile
                                     stxAddress={stxAddresses.ownerStxAddress}
                                     updateStatus={updateStatus}
-                                ></HoldTokenProfile>
-                            </div>
-                        </Col>
-                    </Row>
+                                    showAddress
+                                ></StxProfile>
+                            </Col>
+                            <Col lg="8">
+                                <Row className="justify-content-md-center">
+                                    <Col lg="12">
+                                        <h5 className="mb-4-5">Your STX Loans</h5>
+                                        <Row className="justify-content-md-center">
+                                            <Col lg="6">
+                                                    <StxProfile
+                                                        stxAddress={stxAddresses.appStxAddress}
+                                                        updateStatus={updateStatus}
+                                                    ></StxProfile>
+
+                                            </Col>
+                                            <Col lg="6">
+
+
+                                                    {/* <h5>Your Hold amount for Stacks Loands Hold tokens:</h5>*/}
+                                                    <HoldTokenProfile
+                                                        stxAddress={stxAddresses.ownerStxAddress}
+                                                        updateStatus={updateStatus}
+                                                    ></HoldTokenProfile>
+
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </div>
+
+
                 </div>
             </Card>
         </React.Fragment>

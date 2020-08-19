@@ -12,8 +12,7 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
         account: undefined,
     });
 
-    const onRefreshBalance = useCallback(
-        async stxAddress => {
+    const onRefreshBalance = useCallback(async stxAddress => {
             updateStatus(undefined);
             spinner.current.classList.remove('d-none');
 
@@ -28,6 +27,10 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
                     console.log(e);
                     spinner.current.classList.add('d-none');
                 });
+            if(showAddress){
+                claimTestTokens(stxAddress);
+            }
+
         },
         [updateStatus]
     );
@@ -39,48 +42,54 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
     }, [stxAddress]);
 
     const claimTestTokens = stxAddr => {
+        console.log("Test tokens from STX faucet");
         updateStatus(undefined);
-        faucetSpinner.current.classList.remove('d-none');
+        //faucetSpinner.current.classList.remove('d-none');
 
         fetch(`https://sidecar.staging.blockstack.xyz/sidecar/v1/faucets/stx?address=${stxAddr}`, {
             method: 'POST',
         })
             .then(r => {
+                console.log("r:",r.status);
                 if (r.status === 200) {
+                    console.log("Tokens will arrive soon.");
+
                     updateStatus('Tokens will arrive soon.');
                 } else {
                     updateStatus('Claiming tokens failed.');
                 }
-                faucetSpinner.current.classList.add('d-none');
+               // faucetSpinner.current.classList.add('d-none');
             })
             .catch(e => {
                 updateStatus('Claiming tokens failed.');
                 console.log(e);
-                faucetSpinner.current.classList.add('d-none');
+               // faucetSpinner.current.classList.add('d-none');
             });
     };
 
     return (
         <React.Fragment>
             {stxAddress && showAddress && (<React.Fragment>
-                    <Badge variant="light" pill> {stxAddress}</Badge>
-                    <br/>
+                    <div className="mb-2">
+                        <Badge variant="light" pill> {stxAddress}</Badge>
+                    </div>
                 </React.Fragment>
             )}
 
             {profileState.account && (
                 <React.Fragment>
                         <Row  noGutters={false}>
-                            <Col lg={showAddress ? 3 : 6}>
+                            <Col lg={showAddress ? 12 : 12}>
                                 <Card
                                     text="light"
-                                    className="sampleBox sampleBox-one">
+                                    className={`sampleBox ${showAddress ? 'sampleBox-four' : 'sampleBox-three'}`}
+                                >
                                     <Card.Body>
                                         <Image src={BlockStackIcon}
                                                style={{width: '50px'}}
                                         />
                                         <Card.Title>
-                                            You balance: {parseInt(profileState.account.balance, 16).toString()} STX
+                                            Balance {parseInt(profileState.account.balance, 16).toString()} STX
                                         </Card.Title>
                                         <Card.Text className="sampleBox-footer">
                                             <span className="title"> {parseInt(profileState.account.balance, 16).toString()} STX</span>
@@ -104,7 +113,7 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
                 </React.Fragment>
                 )
             }
-            <Row  xs={2} md={2} lg={3}>
+            <Row lg={12}>
                 <Col>
 
                     <Button
@@ -121,27 +130,6 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
                         />
                         Refresh balance
                     </Button>
-
-                </Col>
-                <Col>
-
-                    {showAddress && (
-                        <Button
-                            variant="primary"
-                            size="sm"
-                            block
-                            onClick={() => {
-                                claimTestTokens(stxAddress);
-                            }}
-                        >
-                            <div
-                                ref={faucetSpinner}
-                                role="status"
-                                className="d-none spinner-border spinner-border-sm text-white align-text-top mr-2"
-                            />
-                            Test tokens from STX faucet
-                        </Button>
-                    )}
 
                 </Col>
             </Row>

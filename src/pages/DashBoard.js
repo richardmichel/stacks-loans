@@ -48,7 +48,7 @@ function DashBoard() {
                                     userData={userData}
                                 />
                             </Tab>
-                            <Tab eventKey="buy" title="Buy Stacks">
+                            <Tab eventKey="buy" title="Request loan">
                                 <Panel/>
                             </Tab>
 

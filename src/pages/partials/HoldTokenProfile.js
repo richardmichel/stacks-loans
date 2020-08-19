@@ -10,7 +10,7 @@ function HoldTokenProfile({stxAddress}) {
 
     useEffect(() => {
         console.log("stxAddress sender");
-        //fetchHodlTokenBalance(stxAddress).then(balance => {
+        //Your own Stacks addressfetchHodlTokenBalance(stxAddress).then(balance => {
         //console.log("balance:", balance);
         //setBalanceProfile({ balance });
         //});
@@ -29,7 +29,7 @@ function HoldTokenProfile({stxAddress}) {
             {!balanceProfile.balance && (
                 <React.Fragment>
                     <Row noGutters={false}>
-                        <Col lg="6">
+                        <Col lg="12">
                             <Card
                                 text="light"
                                 className="sampleBox sampleBox-two">
