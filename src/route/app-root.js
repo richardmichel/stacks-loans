@@ -15,12 +15,14 @@ import {AdminStore} from "@store/admin-store"
 
 const authed = false;
 const authPath = '/';
-const {useContext} = React;
+const {useContext, useState, useEffect} = React;
 
 export default function AppRoot(props) {
     const {state} = useContext(AdminStore);
     // set Title
+    useEffect(()=>{
     useDocumentTitle("Stacks Loans");
+    }, []);
     return (
         <React.Fragment>
             <HeaderComponent/>

@@ -50,6 +50,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
+    "start-client": "react-app-rewired start",
     "start": "node server/server.js",
     "dev": "react-app-rewired start",
     "build": "react-app-rewired build",
