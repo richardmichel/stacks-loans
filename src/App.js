@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 // tools
 import {BrowserRouter as Router} from "react-router-dom";
 import {renderRoutes} from 'react-router-config';
@@ -28,7 +27,6 @@ export default function App(props) {
 
     const {state, dispatch} = useContext(AdminStore);
     const {userSession} = state;
-
 
     const createUser = async (userData) => {
         try {
@@ -101,6 +99,7 @@ export default function App(props) {
 
 
     useEffect(() => {
+        document.title = "Stacks Loans";
 
         if (userSession.isSignInPending()) {
 
