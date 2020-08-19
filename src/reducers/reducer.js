@@ -23,7 +23,7 @@ export const reducer = (state, action) => {
          case 'LOGOUT':
             return { ...state, isAuth: false, user: null };
         case 'LOGIN':
-            return { ...state, isAuth: true, user: action.payload, userData: action.payload };
+            return { ...state, isAuth: true, user: action.payload, userData: action.payload, currentUser: action.payload };
         case 'SET_USERS':
             return { ...state, users: action.payload };
         case 'SET_CURRENT_USER':

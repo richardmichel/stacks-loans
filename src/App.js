@@ -28,60 +28,6 @@ export default function App(props) {
     const {state, dispatch} = useContext(AdminStore);
     const {userSession} = state;
 
-    const createUser = async (userData) => {
-        try {
-            const response = await UserService.store({username: userData.username});
-            if (response && response.status === 200) {
-                const {post: user} = response.data.response;
-                let newArray = [...state.users, user];
-                dispatch({
-                    type: "SET_USERS",
-                    payload: newArray
-                });
-                dispatch({
-                    type: "SET_CURRENT_USER",
-                    payload: user
-                });
-
-
-            } else {
-                console.log("error", response);
-            }
-        } catch (error) {
-            console.log("error", error);
-        }
-    };
-    const getUsers = async (userData) => {
-        try {
-            const response = await UserService.all();
-            if (response && response.status === 200) {
-                const {response: users} = response.data;
-                let currentUser = users.find(
-                    user => user.username === userData.username
-                );
-                if (currentUser) {
-                    dispatch({
-                        type: "SET_CURRENT_USER",
-                        payload: currentUser
-                    });
-
-                } else {
-                    createUser(userData).catch((error) => {
-                    });
-                }
-
-
-            } else {
-                console.log("error", response);
-            }
-
-        } catch (error) {
-            console.log("error", error);
-        }
-
-    };
-
-
     const authOptions = {
 
         finished: ({userSession}) => {
@@ -105,14 +51,10 @@ export default function App(props) {
 
             userSession.handlePendingSignIn().then(userData => {
                 setLogin(userData, dispatch);
-                getUsers(userData).catch((error) => {
-                });
             });
         } else if (userSession.isUserSignedIn()) {
             const userData = userSession.loadUserData();
             setLogin(userData, dispatch);
-            getUsers(userData).catch((error) => {
-            });
         }
 
         return () => {
@@ -131,4 +73,3 @@ export default function App(props) {
         </Connect>
     );
 }
-// <pre>{JSON.stringify(state, null, 2)}</pre>
