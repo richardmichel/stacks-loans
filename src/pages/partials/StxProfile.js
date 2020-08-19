@@ -116,20 +116,24 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
             <Row lg={12}>
                 <Col>
 
-                    <Button
-                        variant="dark"
-                        size="sm" block
-                        onClick={e => {
-                            onRefreshBalance(stxAddress);
-                        }}
-                    >
-                        <div
-                            ref={spinner}
-                            role="status"
-                            className="d-none spinner-border spinner-border-sm text-white align-text-top mr-2"
-                        />
-                        Refresh balance
-                    </Button>
+                    <div  className="my-2">
+                        <Button
+                            variant="dark"
+
+                            size="sm" block
+                            onClick={e => {
+                                onRefreshBalance(stxAddress);
+                            }}
+                        >
+                            <div
+                                ref={spinner}
+                                role="status"
+                                className="d-none spinner-border spinner-border-sm text-white align-text-top mr-2"
+                            />
+                            Refresh balance
+                        </Button>
+                    </div>
+
 
                 </Col>
             </Row>
