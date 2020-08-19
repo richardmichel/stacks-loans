@@ -79,12 +79,7 @@ export default function HeaderComponent() {
       >
         <Container className={`bg-white ${state.isAuth ? "shadow-md-up" : ""}`}>
           <Navbar.Brand as={Link} to="/" className="py-3">
-            <img
-              style={{ height: "1.5em" }}
-              src={MyLogo}
-              id="logo"
-              alt="Logo"
-            />
+            <img src={MyLogo} id="logo" alt="Logo" />
             <span></span>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
