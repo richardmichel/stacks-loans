@@ -13,7 +13,7 @@ import { UserSession } from "blockstack";
 import { appConfig } from "@config/settings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import MyLogo from "@assets/imgs/blockstack_logo.png";
+import MyLogo from "@assets/imgs/blockstack_loan.svg";
 
 // store
 import { AdminStore } from "@store/admin-store";
