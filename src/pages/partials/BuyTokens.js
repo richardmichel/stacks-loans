@@ -44,16 +44,15 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
             await doContractCall({
                 contractAddress: CONTRACT_ADDRESS,
-                contractName: 'michel-test-2',
+                contractName: 'loan-test-3',
                 functionName: 'get-stx-return',
-                functionArgs: [uintCV(amount), uintCV(mounth)],
+                functionArgs: [uintCV(amount)],
                 postConditionMode: PostConditionMode.Deny,
                 postConditions: [
                     makeStandardSTXPostCondition(
                         ownerStxAddress,
                         FungibleConditionCode.LessEqual,
-                        new BigNum(amount),
-                        new BigNum(mounth)
+                        new BigNum(amount)
                     ),
                 ],
                 appDetails,

@@ -2,6 +2,9 @@ import React, {useRef, useState, useCallback, useEffect} from 'react';
 
 import {Card, Jumbotron, Button, Row, Col, Container, Image, ProgressBar, Form, Badge, Alert} from 'react-bootstrap';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faMoneyCheckAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+
 
 import HoldTokenProfile from "@pages/partials/HoldTokenProfile";
 import StxProfile from "@pages/partials/StxProfile";
@@ -32,6 +35,13 @@ function Profile({stxAddresses, userData}) {
                             <br/>
                         </React.Fragment>
                     )}
+                    <Row>
+                        <Col  style={{textAlign: 'right'}}>
+                            <Button variant="danger">
+                                <FontAwesomeIcon icon={faMoneyCheckAlt} /> Pay Loan
+                            </Button>
+                        </Col>
+                    </Row>
 
                     <div className="pt-4 title ">
 
