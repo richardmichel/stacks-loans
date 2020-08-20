@@ -3,6 +3,7 @@ import React, {useRef, useState, useEffect} from 'react';
 import {Badge, Button, Col, Row, Card, Image, InputGroup, FormControl, Form} from 'react-bootstrap';
 import {txIdToStatus, CONTRACT_ADDRESS} from "@pages/partials/StacksAccount";
 import {useConnect} from '@blockstack/connect';
+import {appDetails} from "@pages/partials/StacksAccount";
 import {
     uintCV,
     PostConditionMode,
@@ -28,34 +29,36 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
             });
     }, [ownerStxAddress]);
 
-    const sendAction = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log("handleSubmit");
         spinner.current.classList.remove('d-none');
 
         var amountAsString = textfield.current.value.trim();
         var amount = parseInt(amountAsString);
+        // 1 3
+        let mounth = 1;
 
         try {
             setStatus(`Sending transaction`);
 
             await doContractCall({
                 contractAddress: CONTRACT_ADDRESS,
-                contractName: 'hodl-token',
-                functionName: 'buy-tokens',
-                functionArgs: [uintCV(amount)],
+                contractName: 'michel-test-2',
+                functionName: 'get-stx-return',
+                functionArgs: [uintCV(amount), uintCV(mounth)],
                 postConditionMode: PostConditionMode.Deny,
                 postConditions: [
                     makeStandardSTXPostCondition(
                         ownerStxAddress,
                         FungibleConditionCode.LessEqual,
-                        new BigNum(amount)
+                        new BigNum(amount),
+                        new BigNum(mounth)
                     ),
                 ],
-                appDetails: {
-                    name: 'Speed Spend',
-                    icon: 'https://speed-spend.netlify.app/speedspend.png',
-                },
+                appDetails,
                 finished: data => {
-                    console.log(data);
+                    console.log("data",data);
                     setStatus(txIdToStatus(data.txId));
                     spinner.current.classList.add('d-none');
                 },
@@ -75,24 +78,18 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                 <Card.Body>
 
 
-                    <Form>
+                    <Form onSubmit={(e) => handleSubmit(e)}>
                         <Form.Group controlId="Deposit">
                             <Form.Label>Deposit Amount</Form.Label>
                             <InputGroup className="mb-3">
                                 <FormControl
-                                    aria-label="Recipient's username"
+                                    aria-label="Recipient's Deposit"
                                     aria-describedby="basic-addon2"
                                     type="decimal"
                                     ref={textfield}
                                     className="form-control"
                                     defaultValue={''}
                                     placeholder={placeholder}
-                                    onKeyUp={e => {
-                                        if (e.key === 'Enter') sendAction();
-                                    }}
-                                    onBlur={e => {
-                                        setStatus(undefined);
-                                    }}
                                 />
                                 <InputGroup.Append>
                                     <InputGroup.Text id="basic-addon2">STX</InputGroup.Text>
@@ -121,23 +118,17 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                         </Form.Group>
 
                         <Button variant="primary" type="submit">
+                            <div
+                                ref={spinner}
+                                role="status"
+                                className="d-none spinner-border spinner-border-sm text-info align-text-top mr-2"
+                            />
                             Get loan now
                         </Button>
 
                     </Form>
 
 
-                    {/*
-
-                    <button className="btn btn-outline-secondary" type="button" onClick={sendAction}>
-                                <div
-                                    ref={spinner}
-                                    role="status"
-                                    className="d-none spinner-border spinner-border-sm text-info align-text-top mr-2"
-                                />
-                                Buy
-                            </button>
-                    */}
                     {status && (
                         <>
                             <div>{status}</div>

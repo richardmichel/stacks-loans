@@ -16,7 +16,12 @@ const STX_JSON_PATH = 'stx_stacks_loans.json';
 export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
-export const CONTRACT_ADDRESS = 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8';
+export const CONTRACT_ADDRESS = 'ST1618RD5WAQMGNX4KQ4KBWBGP0X59BT5P324DB1S';
+const urlIcon = "https://stacks-loans.herokuapp.com/favicon.ico";
+export const appDetails = {
+    name: "Stacks Loans",
+    icon: urlIcon,
+};
 
 export const STACK_API_URL = 'https://sidecar.staging.blockstack.xyz';
 export const STACKS_API_ACCOUNTS_URL = `${STACK_API_URL}/v2/accounts`;

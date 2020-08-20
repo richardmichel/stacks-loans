@@ -13,7 +13,7 @@ import routes from "@route/routes";
 import { AdminStore } from "@store/admin-store";
 //actions
 import { setLogin } from "@actions/actions";
-const urlIcon = "favicon.ico";
+import {appDetails} from "@pages/partials/StacksAccount";
 const { useContext, useEffect } = React;
 
 export default function App(props) {
@@ -27,10 +27,7 @@ export default function App(props) {
       setLogin(userData, dispatch);
     },
     userSession,
-    appDetails: {
-      name: "Stacks Loans",
-      icon: urlIcon,
-    },
+    appDetails
   };
 
   useEffect(() => {

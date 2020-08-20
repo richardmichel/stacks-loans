@@ -39,7 +39,7 @@ function DashBoard() {
 
 
                         <Tabs defaultActiveKey="profile" transition={false} id="noanim-tab-example">
-                            <Tab eventKey="profile" title="Profile">
+                            <Tab eventKey="profile" title="Loans">
                                 <Profile
                                     stxAddresses={{
                                         appStxAddress: appStxAddress,
