@@ -8,7 +8,7 @@ import {AdminStore} from "@store/admin-store";
 import {BuyTokens} from "@pages/partials/BuyTokens";
 import {Col, Row} from "react-bootstrap";
 
-const {useContext, useState, useEffect} = React;
+const {useContext} = React;
 
 //import { UnHodlButton } from '../UnHodlButton';
 //import { HodlButton } from '../HodlButton';

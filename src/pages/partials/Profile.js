@@ -1,16 +1,16 @@
-import React, {useRef, useState, useCallback, useEffect} from 'react';
+import React, { useState} from 'react';
 
-import {Card, Jumbotron, Button, Row, Col, Container, Image, ProgressBar, Form, Badge, Alert} from 'react-bootstrap';
+import {Card,  Button, Row, Col, Alert} from 'react-bootstrap';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faMoneyCheckAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faMoneyCheckAlt} from "@fortawesome/free-solid-svg-icons";
 
 
 import HoldTokenProfile from "@pages/partials/HoldTokenProfile";
 import StxProfile from "@pages/partials/StxProfile";
 
 function Profile({stxAddresses, userData}) {
-    const {profile, username} = userData;
+    //const {profile, username} = userData;
     const [status, setStatus] = useState('');
     const updateStatus = status => {
         setStatus(status);

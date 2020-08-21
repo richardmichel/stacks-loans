@@ -28,7 +28,6 @@ export default function HeaderComponent() {
   const closeModal = useRef();
 
   const { state, dispatch } = useContext(AdminStore);
-  const { currentUser } = state;
   const { profile, username } = state.userData;
 
   const [show, setShow] = useState(false);

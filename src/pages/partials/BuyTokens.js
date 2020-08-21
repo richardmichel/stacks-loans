@@ -1,16 +1,39 @@
 import React, {useRef, useState, useEffect} from 'react';
 
-import {Badge, Button, Col, Row, Card, Image, InputGroup, FormControl, Form} from 'react-bootstrap';
-import {txIdToStatus, CONTRACT_ADDRESS} from "@pages/partials/StacksAccount";
+import { Button, Card,  InputGroup, FormControl, Form} from 'react-bootstrap';
+import {txIdToStatus, CONTRACT_ADDRESS, CONTRACT_NAME} from "@pages/partials/StacksAccount";
 import {useConnect} from '@blockstack/connect';
-import {appDetails} from "@pages/partials/StacksAccount";
+import {appDetails, NETWORK } from "@pages/partials/StacksAccount";
+
+import {
+    makeContractCall,
+    BufferCV,
+    StacksMainnet,
+    broadcastTransaction,
+    serializeCV, standardPrincipalCV
+} from '@blockstack/stacks-transactions';
+
 import {
     uintCV,
     PostConditionMode,
     makeStandardSTXPostCondition,
     FungibleConditionCode,
 } from '@blockstack/stacks-transactions';
-import * as BigNum from 'bn.js';
+
+import {
+    sponsorTransaction,
+    BufferReader,
+    deserializeTransaction
+} from '@blockstack/stacks-transactions';
+
+
+import {
+    makeSTXTokenTransfer
+} from '@blockstack/stacks-transactions';
+const BigNum = require('bn.js');
+
+
+
 
 export function BuyTokens({placeholder, ownerStxAddress}) {
     const {doContractCall} = useConnect();
@@ -37,15 +60,17 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
         var amountAsString = textfield.current.value.trim();
         var amount = parseInt(amountAsString);
         // 1 3
-        let mounth = 1;
+        //let mounth = 1;
 
         try {
+
             setStatus(`Sending transaction`);
 
-            await doContractCall({
+
+            /*await doContractCall({
                 contractAddress: CONTRACT_ADDRESS,
-                contractName: 'loan-test-3',
-                functionName: 'get-stx-return',
+                contractName: CONTRACT_NAME,
+                functionName: 'increment',
                 functionArgs: [uintCV(amount)],
                 postConditionMode: PostConditionMode.Deny,
                 postConditions: [
@@ -61,7 +86,34 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                     setStatus(txIdToStatus(data.txId));
                     spinner.current.classList.add('d-none');
                 },
-            });
+            });*/
+
+
+
+
+            let senderKey = serializeCV(new standardPrincipalCV(ownerStxAddress));
+            console.log("senderKey:", senderKey);
+            const txOptions = {
+                recipient: 'ST11G8XNCBAB3VSW16JDRBXY09FA2E4YFVCWRPT58',
+                amount: new BigNum(1),
+                senderKey: "7509f982bca1e2bddea906922f5294aedfaf31b199ce85d41e2979364a043d7e",//'b244296d5907de9864c0b0d51f98a13c52890be0404e83f273144cd5b9960eed01',
+                NETWORK,
+                memo: "test memo",
+                nonce: new BigNum(0), // set a nonce manually if you don't want builder to fetch from a Stacks node
+                fee: new BigNum(200), // set a tx fee if you don't want the builder to estimate
+            };
+
+            const transaction = await makeSTXTokenTransfer(txOptions);
+
+                // to see the raw serialized tx
+            const serializedTx = transaction.serialize().toString('hex');
+            console.log("serializedTx:", serializedTx);
+
+            // broadcasting transaction to the specified network
+            const broadcastTransaction = await broadcastTransaction(transaction, NETWORK);
+            console.log("broadcastTransaction:", broadcastTransaction);
+
+
         } catch (e) {
             console.log(e);
             setStatus(e.toString());

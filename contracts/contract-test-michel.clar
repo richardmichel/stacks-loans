@@ -1,61 +1,59 @@
-;; Simple Token that users can hodl
 
-(define-fungible-token spendable-token u1000000)
-(define-fungible-token hodl-token u1000000)
+(define-fungible-token stacks-loans u100)
+(define-fungible-token hodl-stacks-loans u100)
 
 
-;; Public functions
 
-;; Transfers tokens to a specified principal.
+
 (define-public (transfer (recipient principal) (amount uint))
-   (match (ft-transfer? spendable-token amount tx-sender recipient)
+   (match (ft-transfer? stacks-loans amount tx-sender recipient)
     result (ok true)
     error (err false))
 )
 
 (define-public (hodl (amount uint))
   (begin
-    (unwrap-panic (ft-transfer? spendable-token amount tx-sender (as-contract tx-sender)))
+    (unwrap-panic (ft-transfer? stacks-loans amount tx-sender (as-contract tx-sender)))
     (let ((original-sender tx-sender))
-     (ok (unwrap-panic (as-contract (ft-transfer? hodl-token amount tx-sender original-sender))))
+     (ok (unwrap-panic (as-contract (ft-transfer? hodl-stacks-loans amount tx-sender original-sender))))
     )
   )
 )
 
 (define-public (unhodl (amount uint))
   (begin
-    (print (ft-transfer? hodl-token amount tx-sender (as-contract tx-sender)))
+    (print (ft-transfer? hodl-stacks-loans amount tx-sender (as-contract tx-sender)))
     (let ((original-sender tx-sender))
-      (print (as-contract (ft-transfer? spendable-token amount tx-sender original-sender)))
+      (print (as-contract (ft-transfer? stacks-loans amount tx-sender original-sender)))
     )
   )
 )
 
 (define-read-only (balance-of (owner principal))
-   (+ (ft-get-balance spendable-token owner) (ft-get-balance hodl-token owner))
+   (+ (ft-get-balance stacks-loans owner) (ft-get-balance hodl-stacks-loans owner))
 )
 
 (define-read-only (hodl-balance-of (owner principal))
-  (ft-get-balance hodl-token owner)
+  (ft-get-balance hodl-stacks-loans owner)
 )
 
 (define-read-only (spendable-balance-of (owner principal))
-  (ft-get-balance spendable-token owner)
+  (ft-get-balance stacks-loans owner)
 )
 
 (define-read-only (get-spendable-in-bank)
-  (ft-get-balance spendable-token (as-contract tx-sender))
+  (ft-get-balance stacks-loans (as-contract tx-sender))
 )
 
 (define-read-only (get-hodl-in-bank)
-  (ft-get-balance hodl-token (as-contract tx-sender))
+  (ft-get-balance hodl-stacks-loans (as-contract tx-sender))
 )
 
-;; Mint new tokens.
+
 (define-private (mint (account principal) (amount uint))
     (begin
-      (unwrap-panic (ft-mint? spendable-token amount account))
-      (unwrap-panic (ft-mint? hodl-token amount (as-contract tx-sender)))
+      (unwrap-panic (ft-mint? stacks-loans amount account))
+      (unwrap-panic (ft-mint? hodl-stacks-loans amount (as-contract tx-sender)))
       (ok amount)))
 
 (define-public (buy-tokens (amount uint))
@@ -65,7 +63,6 @@
   )
 )
 
-;; Initialize the contract
 (begin
   (mint 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8 u990000)
 )

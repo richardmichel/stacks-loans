@@ -7,16 +7,17 @@ import {
   AddressHashMode,
   StacksTestnet,
   deserializeCV,
-  serializeCV,
+  serializeCV
 } from '@blockstack/stacks-transactions';
 
 
 import { standardPrincipalCV } from '@blockstack/stacks-transactions';
-const STX_JSON_PATH = 'stx_stacks_loans.json';
+//stxAddress senderconst STX_JSON_PATH = 'stx_stacks_loans.json';
 export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
-export const CONTRACT_ADDRESS = 'ST1618RD5WAQMGNX4KQ4KBWBGP0X59BT5P324DB1S';
+export const CONTRACT_ADDRESS = 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8';
+export const CONTRACT_NAME = 'my-counter';
 const urlIcon = "https://stacks-loans.herokuapp.com/favicon.ico";
 export const appDetails = {
     name: "Stacks Loans",
@@ -25,7 +26,6 @@ export const appDetails = {
 
 export const STACK_API_URL = 'https://sidecar.staging.blockstack.xyz';
 export const STACKS_API_ACCOUNTS_URL = `${STACK_API_URL}/v2/accounts`;
-//export const STACKS_API_ACCOUNTS_BROWSER_URL = 'http://testnet-master.blockstack.org:20443/v2/accounts';
 
 export function getStacksAccount(appPrivateKey) {
   const privateKey = createStacksPrivateKey(appPrivateKey);
@@ -40,12 +40,9 @@ export function getStacksAccount(appPrivateKey) {
 }
 
 export function fetchHodlTokenBalance(sender) {
-    console.log("fetchHodlTokenBalance sender:", sender);
-//    let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/hold-token/hodl-balance-of`;
-
-    let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/hold-token/hodl-balance-of`;
-
-
+    let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/contract2-stacks-loans/hodl-balance-of`;
+    let t = serializeCV(new standardPrincipalCV(sender));
+    let  converted = "0x".concat(t.toString("hex"));
     return fetch(
         url,
         {
@@ -53,7 +50,7 @@ export function fetchHodlTokenBalance(sender) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: `{"sender":"${sender}","arguments":[${serializeCV(new standardPrincipalCV(sender))}]}`,
+            body: `{"sender":"${sender}","arguments":["${converted}"]}`,
         }
     )
         .then(response => response.json())

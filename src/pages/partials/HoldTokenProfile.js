@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {fetchAccount, fetchHodlTokenBalance} from "@pages/partials/StacksAccount";
+import { fetchHodlTokenBalance} from "@pages/partials/StacksAccount";
 import {Card, Col, Image, Row} from "react-bootstrap";
 import BlockStackIcon  from "@assets/imgs/blockstack-icon.png";
+
+
 
 function HoldTokenProfile({stxAddress}) {
     const [balanceProfile, setBalanceProfile] = useState({
@@ -9,11 +11,10 @@ function HoldTokenProfile({stxAddress}) {
     });
 
     useEffect(() => {
-        console.log("stxAddress sender");
-        //Your own Stacks addressfetchHodlTokenBalance(stxAddress).then(balance => {
-        //console.log("balance:", balance);
-        //setBalanceProfile({ balance });
-        //});
+        //Your own Stacks address
+        fetchHodlTokenBalance(stxAddress).then(balance => {
+        setBalanceProfile({ balance });
+        });
 
     }, [stxAddress]);
 

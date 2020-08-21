@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Button, Row, Col, Container, Tabs, Tab, Badge} from 'react-bootstrap';
+import { Row, Col, Container, Tabs, Tab} from 'react-bootstrap';
 import { getStacksAccount } from '@pages/partials/StacksAccount';
 //
 import { addressToString } from '@blockstack/stacks-transactions';
@@ -10,13 +10,13 @@ import {AdminStore} from "@store/admin-store";
 import Profile from "@pages/partials/Profile";
 import Panel from "@pages/partials/Panel";
 
-const {useContext, useState, useEffect} = React;
+const {useContext, useEffect} = React;
 
 function DashBoard() {
     const {state} = useContext(AdminStore);
-    const { currentUser, userData} = state;
-    const {profile, username} = userData;
-    const decentralizedID = userData.decentralizedID;
+
+    const {  userData} = state;
+    //const decentralizedID = userData.decentralizedID;
 
 
     const { address } = getStacksAccount(userData.appPrivateKey);
@@ -27,7 +27,7 @@ function DashBoard() {
        console.log("userData:", userData);
         console.log("address:", address);
         console.log("appStxAddress:", appStxAddress);
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

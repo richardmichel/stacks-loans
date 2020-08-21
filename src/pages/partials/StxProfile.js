@@ -6,7 +6,7 @@ import Loader from "@components/ui/Loader";
 
 function StxProfile({stxAddress, updateStatus, showAddress}) {
     const spinner = useRef();
-    const faucetSpinner = useRef();
+    //const faucetSpinner = useRef();
 
     const [profileState, setProfileState] = useState({
         account: undefined,
