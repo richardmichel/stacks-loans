@@ -1,6 +1,6 @@
 
-(define-fungible-token stacks-loans u100)
-(define-fungible-token hodl-stacks-loans u100)
+(define-fungible-token stacks-loans u1)
+(define-fungible-token hodl-stacks-loans u1)
 
 
 
@@ -64,5 +64,5 @@
 )
 
 (begin
-  (mint 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8 u990000)
+  (mint 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8 u2)
 )

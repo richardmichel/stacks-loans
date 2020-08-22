@@ -15,6 +15,7 @@ import { AdminStore } from "@store/admin-store";
 import { setLogin } from "@actions/actions";
 import {appDetails} from "@pages/partials/StacksAccount";
 const { useContext, useEffect } = React;
+//const authOrigin = 'https://deploy-preview-301--stacks-authenticator.netlify.app';
 
 export default function App(props) {
   const { state, dispatch } = useContext(AdminStore);
@@ -25,8 +26,9 @@ export default function App(props) {
     finished: ({ userSession }) => {
       const userData = userSession.loadUserData();
       setLogin(userData, dispatch);
+      document.location = '/'
     },
-    userSession,
+    userSession,//authOrigin,
     appDetails
   };
 
