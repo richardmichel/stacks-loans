@@ -251,6 +251,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                 contractName: contractName,
                 functionName: functionName,
                 functionArgs: [],
+                authOrigin,
                 appDetails,
                 finished: data => {
                     console.log(data);
