@@ -47,6 +47,10 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
     const spinner = useRef();
     const [status, setStatus] = useState();
 
+    //-->
+    const [txID, setTxID] = useState('0x25a4f0437a8e25673d917f00e345a823593d1594205442157512c2b5064977b7');
+    const [callTxID, setCallTxID] = useState();
+    const [functionReturn, setFunctionReturn] = useState();
 
     useEffect(() => {
         console.log("ownerStxAddress:", ownerStxAddress);
@@ -104,6 +108,53 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
         }
     };
 
+    const onClick = async () => {
+        //console.log(props.test);
+        const callOptions = {
+            contractAddress: CONTRACT_ADDRESS,
+            contractName: CONTRACT_NAME,
+            functionName: 'showAddress',
+            functionArgs: [],
+            appDetails,
+            finished: data => {
+                console.log(data);
+                console.log('TX ID:', data.txId);
+                console.log('Raw TX:', data.txRaw);
+                setCallTxID(data.txId);
+                const res = fetch(`https://sidecar.staging.blockstack.xyz/sidecar/v1/tx/${data.txId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log("data",data);
+                    });
+            },
+        };
+        await doContractCall(callOptions);
+    };
+
+    //const authOrigin = 'https://app.blockstack.org';
+    const checkFunctionCall = () => {
+        if(!callTxID){
+            alert("callTxID is empty");
+            return true;
+        }
+        const res = fetch(`https://sidecar.staging.blockstack.xyz/sidecar/v1/tx/${callTxID}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.tx_status === 'success') {
+                    setFunctionReturn(data.tx_result.repr);
+                }
+            });
+    };
+    const onCheckTxn = () => {
+        if (txID) {
+            const res = fetch(`https://sidecar.staging.blockstack.xyz/sidecar/v1/tx/${txID}`)
+                .then(res => res.json())
+                .then(res => console.log(res));
+        } else {
+            console.log('Contract Not Deployed');
+        }
+    };
 
     return (
         <div>
@@ -168,6 +219,16 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                     )}
                 </Card.Body>
             </Card>
+
+            <Button onClick={onCheckTxn}>Check Transaction</Button>
+            <Button onClick={onClick}>Call Contract's Function</Button>
+            <Button onClick={checkFunctionCall}>Check If You Won</Button>
+            <pre>
+                functionReturn:
+                {functionReturn
+                    ? 'The return of the function is' + functionReturn
+                    : 'Contract has yet to be called'}
+            </pre>
 
         </div>
     );

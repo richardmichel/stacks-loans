@@ -18,7 +18,7 @@ export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
 export const CONTRACT_ADDRESS = 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8';
-export const CONTRACT_NAME = 'final-contract-stacks-loans';
+export const CONTRACT_NAME = 'michel-show-address31';
 const urlIcon = "https://stacks-loans.herokuapp.com/favicon.ico";
 export const appDetails = {
     name: "Stacks Loans",
@@ -42,7 +42,7 @@ export function getStacksAccount(appPrivateKey) {
 
 export function fetchHodlTokenBalance(sender) {
     //https://sidecar.staging.blockstack.xyz/v2/contracts/call-read/{stacks_address}/{contract_name}/{function_name}
-    let functionName = 'hodl-balance-of';
+    let functionName = 'showAddress';//hodl-balance-of
     let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/${CONTRACT_NAME}/${functionName}`;
 
     let t = serializeCV(new standardPrincipalCV(sender));
