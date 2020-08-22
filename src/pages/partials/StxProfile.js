@@ -69,7 +69,7 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
 
     return (
         <React.Fragment>
-            {stxAddress && showAddress && (<React.Fragment>
+            {stxAddress && (<React.Fragment>
                     <div className="mb-2">
                         <Badge variant="light" pill> {stxAddress}</Badge>
                     </div>

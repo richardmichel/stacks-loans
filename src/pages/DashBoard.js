@@ -14,11 +14,8 @@ const {useContext, useEffect} = React;
 
 function DashBoard() {
     const {state} = useContext(AdminStore);
-
     const {  userData} = state;
-    //const decentralizedID = userData.decentralizedID;
-
-
+    const decentralizedID = userData.decentralizedID;
     const { address } = getStacksAccount(userData.appPrivateKey);
     const appStxAddress = addressToString(address);
     const ownerStxAddress = userData.profile.stxAddress;
@@ -35,9 +32,6 @@ function DashBoard() {
             <Container>
                 <Row className="justify-content-md-center bg-white py-8 shadow-md-bottom">
                     <Col lg="12">
-
-
-
                         <Tabs defaultActiveKey="profile" transition={false} id="noanim-tab-example">
                             <Tab eventKey="profile" title="Loans">
                                 <Profile
@@ -51,14 +45,9 @@ function DashBoard() {
                             <Tab eventKey="buy" title="Request loan">
                                 <Panel/>
                             </Tab>
-
                         </Tabs>
-
-
                     </Col>
                 </Row>
-
-
             </Container>
         </React.Fragment>
     )

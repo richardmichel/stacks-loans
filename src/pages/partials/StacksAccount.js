@@ -12,12 +12,13 @@ import {
 
 
 import { standardPrincipalCV } from '@blockstack/stacks-transactions';
+
 //stxAddress senderconst STX_JSON_PATH = 'stx_stacks_loans.json';
 export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
 export const CONTRACT_ADDRESS = 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8';
-export const CONTRACT_NAME = 'jimbo3-micki';
+export const CONTRACT_NAME = 'final-contract-stacks-loans';
 const urlIcon = "https://stacks-loans.herokuapp.com/favicon.ico";
 export const appDetails = {
     name: "Stacks Loans",
@@ -41,10 +42,8 @@ export function getStacksAccount(appPrivateKey) {
 
 export function fetchHodlTokenBalance(sender) {
     //https://sidecar.staging.blockstack.xyz/v2/contracts/call-read/{stacks_address}/{contract_name}/{function_name}
-    // https://blockstack.github.io/stacks-blockchain-api/#operation/call_read_only_function
-    //let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/contract2-stacks-loans/hodl-balance-of`;
-
-    let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/${CONTRACT_NAME}/showAddress`;
+    let functionName = 'hodl-balance-of';
+    let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/${CONTRACT_NAME}/${functionName}`;
 
     let t = serializeCV(new standardPrincipalCV(sender));
     let  converted = "0x".concat(t.toString("hex"));

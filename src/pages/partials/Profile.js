@@ -23,8 +23,6 @@ function Profile({stxAddresses, userData}) {
         <React.Fragment>
             <Card body className="border-0">
                 <div className="Profile">
-
-
                     {status && (
                         <React.Fragment>
                             <br/>
