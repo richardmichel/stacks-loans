@@ -17,7 +17,7 @@ import { standardPrincipalCV } from '@blockstack/stacks-transactions';
 export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
-export const CONTRACT_ADDRESS = 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8';
+export const CONTRACT_ADDRESS = 'ST3FHJFW64EK06MD3X702CMVCB2T4N1WDFMVXV7K6';
 export const CONTRACT_NAME = 'michel-show-address31';
 const urlIcon = "https://stacks-loans.herokuapp.com/favicon.ico";
 export const appDetails = {
