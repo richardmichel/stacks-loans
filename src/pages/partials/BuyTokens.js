@@ -83,6 +83,8 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
         var amountAsString = textfield.current.value.trim();
         var amount = parseInt(amountAsString);
+        console.log("handleSubmit amount:", amount);
+
         // 1 3
         //let mounth = 1;
 

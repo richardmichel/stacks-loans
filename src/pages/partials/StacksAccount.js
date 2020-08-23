@@ -7,13 +7,14 @@ import {
   AddressHashMode,
   StacksTestnet,
   deserializeCV,
-  serializeCV
+  serializeCV,
+    addressToString
 } from '@blockstack/stacks-transactions';
-
 
 import { standardPrincipalCV } from '@blockstack/stacks-transactions';
 
-//stxAddress senderconst STX_JSON_PATH = 'stx_stacks_loans.json';
+//stxAddress sender
+const STX_JSON_PATH = 'stx_stacks_loans.json';
 export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
@@ -91,15 +92,20 @@ export function txIdToStatus(txId) {
 }
 
 
-/*
+
 export async function getUserAddress(userSession, username) {
   return userSession
     .getFile(STX_JSON_PATH, {
       decrypt: false,
       username: username,
     })
-    .then(r => JSON.parse(r))
-    .catch(e => console.log(e, username));
+    .then(r =>{
+        JSON.parse(r)
+    })
+    .catch(e =>{
+        console.log("getUserAddress: ", e);
+        console.log("getUserAddress username: ", username);
+    });
 }
 
 
@@ -112,9 +118,7 @@ export function resultToStatus(result) {
     return result;
   }
 }
-
-
-
+/*
 export function fetchJackpot(sender) {
   return fetch(
     `${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/flip-coin-jackpot/get-jackpot`,
@@ -139,5 +143,42 @@ export function fetchJackpot(sender) {
       }
     });
 }*/
+// Gaia
+
+function afterSTXAddressPublished() {
+    console.log('STX address published');
+    stxAddressSemaphore.putting = false;
+}
+
+const stxAddressSemaphore = { putting: false };
+export const putStxAddress = (userSession, address) =>{
+    if (!stxAddressSemaphore.putting) {
+        stxAddressSemaphore.putting = true;
+        userSession
+            .putFile(STX_JSON_PATH, JSON.stringify({ address }), {
+                encrypt: false,
+            })
+            .then(() => afterSTXAddressPublished())
+            .catch(r => {
+                console.log(r);
+                console.log('STX address NOT published, retrying');
+                userSession.getFile(STX_JSON_PATH, { decrypt: false }).then(s => {
+                    console.log({ s });
+                    userSession
+                        .putFile(STX_JSON_PATH, JSON.stringify({ address }), {
+                            encrypt: false,
+                        })
+                        .then(() => afterSTXAddressPublished())
+                        .catch(r => {
+                            console.log('STX address NOT published');
+                            console.log(r);
+                            stxAddressSemaphore.putting = false;
+                        });
+                });
+            });
+    }
+}
+
+
 
 

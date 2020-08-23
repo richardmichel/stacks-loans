@@ -9,6 +9,8 @@ import {AdminStore} from "@store/admin-store";
 
 import Profile from "@pages/partials/Profile";
 import Panel from "@pages/partials/Panel";
+import SpendField from "@pages/partials/SpendField";
+
 
 const {useContext, useEffect} = React;
 
@@ -44,6 +46,9 @@ function DashBoard() {
                             </Tab>
                             <Tab eventKey="buy" title="Request loan">
                                 <Panel/>
+                            </Tab>
+                            <Tab eventKey="SpendField" title="SpendField">
+                                <SpendField/>
                             </Tab>
                         </Tabs>
                     </Col>
