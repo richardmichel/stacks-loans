@@ -25,7 +25,26 @@ function HoldTokenProfile({stxAddress}) {
             <p>balanceProfile:</p>
             {balanceProfile.balance && (
                 <React.Fragment>
-                    {balanceProfile.balance} <br/>
+                    <Row noGutters={false}>
+                        <Col lg="12">
+                            <Card
+                                text="light"
+                                className="sampleBox sampleBox-two">
+                                <Card.Body>
+                                    <Image src={BlockStackIcon}
+                                           style={{width: '50px'}}
+                                    />
+                                    <Card.Title>
+                                        { JSON.stringify(balanceProfile.balance, null, 2)} HoldToken STX
+                                    </Card.Title>
+                                    <Card.Text className="sampleBox-footer">
+                                        <span className="title"> </span>
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+
                 </React.Fragment>
             )}
 
@@ -47,8 +66,6 @@ function HoldTokenProfile({stxAddress}) {
                                         <span className="title"> </span>
                                     </Card.Text>
                                 </Card.Body>
-
-
                             </Card>
                         </Col>
                     </Row>
