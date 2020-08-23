@@ -1,4 +1,5 @@
 import * as React from "react";
+import {Card, Button, Row, Col, Container, Image, ProgressBar, Form} from 'react-bootstrap';
 import {
     makeSTXTokenTransfer,
     privateKeyToString,
@@ -30,6 +31,14 @@ function SpendField() {
     const [account, setAccount] = useState();
     const [identity, setIdentity] = useState();
 
+    const deleteFile = _ => {
+        userSession.deleteFile('stacksloans.json').then(() => {
+            // user.json is now removed.
+            console.log("user.json is now removed.");
+        });
+    };
+
+
     useEffect(() => {
 
         const appPrivateKey = userData.appPrivateKey;
@@ -47,13 +56,14 @@ function SpendField() {
                 console.log("userSession:",userSession);
                 console.log("userSession:",userData.username);
 
-                const address = await getUserAddress(userSession, userData.username);
-  //              console.log("address:", address);
+               const address = await getUserAddress(userSession, userData.username);
+                console.log("address:", address);
 
                 console.log("fin");
-                /*if (!address) {
+                if (!address) {
+                    console.log("!address");
                     await putStxAddress(userSession, addrAsString);
-                }*/
+                }
             });
     }, [userSession]);
 
@@ -112,6 +122,11 @@ function SpendField() {
     return (
         <div>
             Send Test STXs (from your app Stacks address)
+
+            <Button variant="primary" type="button" onClick={(e) => deleteFile(e)}>
+                <strong>deleteFile </strong>
+            </Button>
+
             <div className="NoteField input-group ">
                 <div className="input-group-prepend">
                     <span className="input-group-text"> title</span>

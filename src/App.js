@@ -28,11 +28,7 @@ export default function App(props) {
     finished: ({ userSession }) => {
       const userData = userSession.loadUserData();
       setLogin(userData, dispatch);
-
-
-      // new
       const { address } = getStacksAccount(userData.appPrivateKey);
-      console.log("set--------->:",JSON.stringify({ address: addressToString(address) }));
       putStxAddress(userSession, addressToString(address));
       //document.location = '/';
     },

@@ -18,7 +18,7 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
 
             fetchAccount(stxAddress)
                 .then(acc => {
-                    console.log(acc);
+
                     setProfileState({account: acc});
                     spinner.current.classList.add('d-none');
                 })
@@ -42,7 +42,7 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
     }, [stxAddress]);
 
     const claimTestTokens = stxAddr => {
-        console.log("Test tokens from STX faucet");
+
         updateStatus(undefined);
         //faucetSpinner.current.classList.remove('d-none');
 
@@ -50,9 +50,9 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
             method: 'POST',
         })
             .then(r => {
-                console.log("r:",r.status);
+
                 if (r.status === 200) {
-                    console.log("Tokens will arrive soon.");
+
 
                     updateStatus('Tokens will arrive soon.');
                 } else {

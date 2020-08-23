@@ -14,6 +14,7 @@ import {
     StacksTestnet,
     addressToString,
     uintCV,
+    intCV,
     PostConditionMode,
     makeStandardSTXPostCondition,
     FungibleConditionCode,
@@ -63,9 +64,12 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
     const [functionReturn, setFunctionReturn] = useState();
 
 
-
     useEffect(() => {
-        console.log("ownerStxAddress:", ownerStxAddress);
+
+
+    }, []);
+    useEffect(() => {
+
         fetch(ownerStxAddress)
             .catch(e => {
                 setStatus('Failed to access your account', e);
@@ -78,12 +82,10 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("handleSubmit");
         spinner.current.classList.remove('d-none');
 
         var amountAsString = textfield.current.value.trim();
         var amount = parseInt(amountAsString);
-        console.log("handleSubmit amount:", amount);
 
         // 1 3
         //let mounth = 1;
@@ -91,24 +93,26 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
         try {
 
             setStatus(`Sending transaction`);
+            const stx = 1;
+            const months = 1;
 
 
             await doContractCall({
-                contractAddress: CONTRACT_ADDRESS,
-                contractName: CONTRACT_NAME,
-                functionName: 'buy-tokens',
-                functionArgs: [uintCV(amount)],
+                contractAddress: 'ST1618RD5WAQMGNX4KQ4KBWBGP0X59BT5P324DB1S',//'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8',//CONTRACT_ADDRESS,
+                contractName:  'loan-test-15',//'transfer-tokens',//CONTRACT_NAME,
+                functionName: 'get-stx-return',//'transfer-tokens',//'buy-tokens',
+                functionArgs: [intCV(stx),intCV(months)],
                 postConditionMode: PostConditionMode.Deny,
                 postConditions: [
                     makeStandardSTXPostCondition(
                         ownerStxAddress,
                         FungibleConditionCode.LessEqual,
-                        new BigNum(amount)
+                        new BigNum(stx)
                     ),
                 ],
                 appDetails,
                 finished: data => {
-                    console.log("data", data);
+
                     setStatus(txIdToStatus(data.txId));
                     spinner.current.classList.add('d-none');
                 },
@@ -123,7 +127,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
     };
 
     const onClick = async () => {
-        //console.log(props.test);
+
         const callOptions = {
             contractAddress: CONTRACT_ADDRESS,
             contractName: CONTRACT_NAME,
@@ -131,14 +135,12 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
             functionArgs: [],
             appDetails,
             finished: data => {
-                console.log(data);
-                console.log('TX ID:', data.txId);
-                console.log('Raw TX:', data.txRaw);
+
                 setCallTxID(data.txId);
                 const res = fetch(`https://sidecar.staging.blockstack.xyz/sidecar/v1/tx/${data.txId}`)
                     .then(res => res.json())
                     .then(data => {
-                        console.log("data",data);
+
                     });
             },
         };
@@ -154,7 +156,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
         const res = fetch(`https://sidecar.staging.blockstack.xyz/sidecar/v1/tx/${callTxID}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+
                 if (data.tx_status === 'success') {
                     setFunctionReturn(data.tx_result.repr);
                 }
@@ -176,11 +178,11 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
     };
     const processing = async(tx, count = 0)=>{
         try {
-            var result = await fetch(
+            let result = await fetch(
                 `${SIDECAR_API_URL}/sidecar/v1/tx/${tx}`//.substr(1, tx.length - 2)
             );
-            var value = await result.json();
-            console.log("value:",value);
+            let value = await result.json();
+
             if (value.tx_status === "success") {
                 return true;
             }
@@ -270,11 +272,10 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                 senderKey: PRIVATE_KEY,
                 network,
             });
-            console.log("transaction:", transaction);
+
 
             const result = await broadcastTransaction(transaction, network);
-            
-            console.log("result 1:", result );
+
             if (result && result.error ) {
                 if (result.reason === "ContractAlreadyExists") {
                     return "TxBroadcastResultOk";
@@ -285,7 +286,6 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                 }
             }
             const processed = await processing("0x"+result );
-            console.log("processed 1:", processed );
             if (!processed) {
                 throw new Error(`failed to deploy ${CONTRACT_NAME}: transaction not found`);
             }

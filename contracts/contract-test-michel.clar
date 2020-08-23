@@ -49,16 +49,32 @@
     (begin
       (unwrap-panic (ft-mint? stacks-loans-token amount account))
       (unwrap-panic (ft-mint? stacks-loans-hodl-token amount (as-contract tx-sender)))
-      (ok amount)))
+      (ok amount)
+     )
+)
 
 (define-public (buy-tokens (amount uint))
   (begin
-    (unwrap-panic (stx-transfer? amount tx-sender 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK))
+    (unwrap-panic (stx-transfer? amount tx-sender 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8))
     (mint tx-sender amount)
+  )
+)
+
+
+(define-public (transfer-tokens (amount uint))
+  (begin
+    (unwrap-panic (stx-transfer? amount tx-sender 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8))
+    (ok amount)
+  )
+)
+(define-public (transfer-reverse-tokens (amount uint))
+  (begin
+    (unwrap-panic (stx-transfer? amount  'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8 tx-sender))
+    (ok amount)
   )
 )
 
 ;; Initialize the contract
 (begin
-  (mint 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK u990000)
+  (mint 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8 u990000)
 )

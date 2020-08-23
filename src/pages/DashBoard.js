@@ -23,9 +23,6 @@ function DashBoard() {
     const ownerStxAddress = userData.profile.stxAddress;
 
     useEffect(()=>{
-       console.log("userData:", userData);
-        console.log("address:", address);
-        console.log("appStxAddress:", appStxAddress);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

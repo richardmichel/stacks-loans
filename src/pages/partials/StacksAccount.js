@@ -1,20 +1,20 @@
 import React from 'react';
 import {
-  createStacksPrivateKey,
-  getPublicKey,
-  addressFromPublicKeys,
-  AddressVersion,
-  AddressHashMode,
-  StacksTestnet,
-  deserializeCV,
-  serializeCV,
+    createStacksPrivateKey,
+    getPublicKey,
+    addressFromPublicKeys,
+    AddressVersion,
+    AddressHashMode,
+    StacksTestnet,
+    deserializeCV,
+    serializeCV,
     addressToString
 } from '@blockstack/stacks-transactions';
 
-import { standardPrincipalCV } from '@blockstack/stacks-transactions';
+import {standardPrincipalCV} from '@blockstack/stacks-transactions';
 
 //stxAddress sender
-const STX_JSON_PATH = 'stx_stacks_loans.json';
+const STX_JSON_PATH = 'stacksloans.json';
 export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
@@ -32,24 +32,24 @@ export const STACK_API_URL = 'https://sidecar.staging.blockstack.xyz';
 export const STACKS_API_ACCOUNTS_URL = `${STACK_API_URL}/v2/accounts`;
 
 export function getStacksAccount(appPrivateKey) {
-  const privateKey = createStacksPrivateKey(appPrivateKey);
-  const publicKey = getPublicKey(privateKey);
-  const address = addressFromPublicKeys(
-    AddressVersion.TestnetSingleSig,
-    AddressHashMode.SerializeP2PKH,
-    1,
-    [publicKey]
-  );
-  return { privateKey, address };
+    const privateKey = createStacksPrivateKey(appPrivateKey);
+    const publicKey = getPublicKey(privateKey);
+    const address = addressFromPublicKeys(
+        AddressVersion.TestnetSingleSig,
+        AddressHashMode.SerializeP2PKH,
+        1,
+        [publicKey]
+    );
+    return {privateKey, address};
 }
 
 export function fetchHodlTokenBalance(sender) {
     //https://sidecar.staging.blockstack.xyz/v2/contracts/call-read/{stacks_address}/{contract_name}/{function_name}
     let functionName = 'hodl-balance-of';
-    let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/${CONTRACT_NAME}/${functionName}`;
+    let url = `${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/${CONTRACT_NAME}/${functionName}`;
 
     let t = serializeCV(new standardPrincipalCV(sender));
-    let  converted = "0x".concat(t.toString("hex"));
+    let converted = "0x".concat(t.toString("hex"));
     return fetch(
         url,
         {
@@ -62,7 +62,7 @@ export function fetchHodlTokenBalance(sender) {
     )
         .then(response => response.json())
         .then(hodlBalanceOf => {
-            console.log({ hodlBalanceOf });
+            console.log({hodlBalanceOf});
             if (hodlBalanceOf.okay) {
                 const cv = deserializeCV(Buffer.from(hodlBalanceOf.result.substr(2), 'hex'));
                 if (cv.value) {
@@ -74,10 +74,11 @@ export function fetchHodlTokenBalance(sender) {
         });
 
 }
+
 export function fetchAccount(addressAsString) {
     const balanceUrl = `${STACKS_API_ACCOUNTS_URL}/${addressAsString}`;
     return fetch(balanceUrl).then(r => {
-        console.log({ r });
+        console.log({r});
         return r.json();
     });
 }
@@ -92,32 +93,57 @@ export function txIdToStatus(txId) {
 }
 
 
+export const getUserAddress = async (userSession, username) => {
 
-export async function getUserAddress(userSession, username) {
-  return userSession
-    .getFile(STX_JSON_PATH, {
-      decrypt: false,
-      username: username,
-    })
-    .then(r =>{
-        JSON.parse(r)
-    })
-    .catch(e =>{
-        console.log("getUserAddress: ", e);
+    let options = {
+        decrypt: false,
+        username: username,
+    };
+
+    let data = {};
+    console.log("getUserAddress userSession:", userSession);
+    try {
+
+        const fileContents = await userSession.getFile(STX_JSON_PATH, options);
+        if (fileContents) {
+            console.log(fileContents);
+            data = JSON.parse(fileContents);
+            return data;
+        } else {
+             return false;
+
+        }
+    } catch (error) {
+        console.log("getUserAddress: ", error);
         console.log("getUserAddress username: ", username);
-    });
-}
+        return false;
+    }
 
+  /*  return userSession
+        .getFile(STX_JSON_PATH, {
+            decrypt: false,
+            username: username,
+        })
+        .then(r => {
+            console.log("rrrr:", r);
+            JSON.parse(r)
+        })
+        .catch(e => {
+            console.log("getUserAddress: ", e);
+            console.log("getUserAddress username: ", username);
+        });*/
+}
 
 
 export function resultToStatus(result) {
-  if (result && result.startsWith('"') && result.length === 66) {
-    const txId = result.substr(1, 64);
-    txIdToStatus(txId);
-  } else {
-    return result;
-  }
+    if (result && result.startsWith('"') && result.length === 66) {
+        const txId = result.substr(1, 64);
+        txIdToStatus(txId);
+    } else {
+        return result;
+    }
 }
+
 /*
 export function fetchJackpot(sender) {
   return fetch(
@@ -143,6 +169,7 @@ export function fetchJackpot(sender) {
       }
     });
 }*/
+
 // Gaia
 
 function afterSTXAddressPublished() {
@@ -150,22 +177,24 @@ function afterSTXAddressPublished() {
     stxAddressSemaphore.putting = false;
 }
 
-const stxAddressSemaphore = { putting: false };
-export const putStxAddress = (userSession, address) =>{
+const stxAddressSemaphore = {putting: false};
+export const putStxAddress = (userSession, address) => {
     if (!stxAddressSemaphore.putting) {
         stxAddressSemaphore.putting = true;
+        const options  = {address: address};
+        console.log("options", options);
         userSession
-            .putFile(STX_JSON_PATH, JSON.stringify({ address }), {
+            .putFile(STX_JSON_PATH, JSON.stringify(options), {
                 encrypt: false,
             })
             .then(() => afterSTXAddressPublished())
             .catch(r => {
                 console.log(r);
                 console.log('STX address NOT published, retrying');
-                userSession.getFile(STX_JSON_PATH, { decrypt: false }).then(s => {
-                    console.log({ s });
+                userSession.getFile(STX_JSON_PATH, {decrypt: false}).then(s => {
+                    console.log({s});
                     userSession
-                        .putFile(STX_JSON_PATH, JSON.stringify({ address }), {
+                        .putFile(STX_JSON_PATH, JSON.stringify({address}), {
                             encrypt: false,
                         })
                         .then(() => afterSTXAddressPublished())
