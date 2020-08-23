@@ -96,6 +96,14 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
         contractName: "prueba1000",
         functionName: "transfer-tokens",
         functionArgs: [uintCV(amount)],
+        postConditionMode: PostConditionMode.Deny,
+        postConditions: [
+          makeStandardSTXPostCondition(
+            ownerStxAddress,
+            FungibleConditionCode.LessEqual,
+            new BigNum(amount)
+          ),
+        ],
         appDetails,
         finished: (data) => {
           console.log("data setStatus:", data);
