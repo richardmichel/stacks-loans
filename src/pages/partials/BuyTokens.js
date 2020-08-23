@@ -96,7 +96,7 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
         contractName: "prueba1000",
         functionName: "transfer-tokens",
         functionArgs: [uintCV(amount)],
-        postConditionMode: PostConditionMode.Deny,
+        postConditionMode: PostConditionMode.Allow,
         postConditions: [
           makeStandardSTXPostCondition(
             ownerStxAddress,
