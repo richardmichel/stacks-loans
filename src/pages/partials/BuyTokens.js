@@ -1,15 +1,15 @@
 import React, {useRef, useState, useEffect, useContext} from 'react';
 
 import {Button, Card, InputGroup, FormControl, Form} from 'react-bootstrap';
-import {txIdToStatus, CONTRACT_ADDRESS, CONTRACT_NAME} from "@pages/partials/StacksAccount";
+import {txIdToStatus, CONTRACT_ADDRESS, CONTRACT_NAME, PRIVATE_KEY} from "@pages/partials/StacksAccount";
 import {
     useConnect,
-//    openContractDeploy,
+    openContractDeploy,
 //    openSTXTransfer
 } from '@blockstack/connect';
 import {appDetails} from "@pages/partials/StacksAccount";
 
-import {getStacksAccount} from '@pages/partials/StacksAccount';
+import {getStacksAccount, STACK_API_URL} from '@pages/partials/StacksAccount';
 import {
     StacksTestnet,
     addressToString,
@@ -18,6 +18,8 @@ import {
     makeStandardSTXPostCondition,
     FungibleConditionCode,
     BufferReader,
+    makeContractDeploy,
+    broadcastTransaction,
 //    sponsorTransaction,
 //    deserializeTransaction
 //    makeContractCall,
@@ -39,6 +41,14 @@ import {AdminStore} from "@store/admin-store";
 
 const BigNum = require('bn.js');
 
+
+
+const STACKS_API_URL = "https://sidecar.staging.blockstack.xyz";
+const SIDECAR_API_URL = "https://sidecar.staging.blockstack.xyz";
+const network = new StacksTestnet();
+network.coreApiUrl = STACKS_API_URL;
+
+
 export function BuyTokens({placeholder, ownerStxAddress}) {
 
     const {state} = useContext(AdminStore);
@@ -51,6 +61,8 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
     const [txID, setTxID] = useState('0x25a4f0437a8e25673d917f00e345a823593d1594205442157512c2b5064977b7');
     const [callTxID, setCallTxID] = useState();
     const [functionReturn, setFunctionReturn] = useState();
+
+
 
     useEffect(() => {
         console.log("ownerStxAddress:", ownerStxAddress);
@@ -156,6 +168,134 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
         }
     };
 
+    //-->
+    const  timeout =(ms) => {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    };
+    const processing = async(tx, count = 0)=>{
+        try {
+            var result = await fetch(
+                `${SIDECAR_API_URL}/sidecar/v1/tx/${tx}`//.substr(1, tx.length - 2)
+            );
+            var value = await result.json();
+            console.log("value:",value);
+            if (value.tx_status === "success") {
+                return true;
+            }
+            if (count > 30) {
+                return false;
+            }
+
+            const holdDown = await timeout(10000);
+            return processing(tx, count + 1);
+        }catch(error){
+            console.log("error processing:", processing);
+        }
+    }
+
+    const onDeploy = async () => {
+        try {
+
+            const codeBody = `(define-fungible-token stacks-loans-token u1000000)
+(define-fungible-token stacks-loans-hodl-token u1000000)
+
+(define-public (transfer (recipient principal) (amount uint))
+   (match (ft-transfer? stacks-loans-token amount tx-sender recipient)
+    result (ok true)
+    error (err false))
+)
+
+(define-public (hodl (amount uint))
+  (begin
+    (unwrap-panic (ft-transfer? stacks-loans-token amount tx-sender (as-contract tx-sender)))
+    (let ((original-sender tx-sender))
+     (ok (unwrap-panic (as-contract (ft-transfer? stacks-loans-hodl-token amount tx-sender original-sender))))
+    )
+  )
+)
+
+(define-public (unhodl (amount uint))
+  (begin
+    (print (ft-transfer? stacks-loans-hodl-token amount tx-sender (as-contract tx-sender)))
+    (let ((original-sender tx-sender))
+      (print (as-contract (ft-transfer? stacks-loans-token amount tx-sender original-sender)))
+    )
+  )
+)
+
+(define-read-only (balance-of (owner principal))
+   (+ (ft-get-balance stacks-loans-token owner) (ft-get-balance stacks-loans-hodl-token owner))
+)
+
+(define-read-only (hodl-balance-of (owner principal))
+  (ft-get-balance stacks-loans-hodl-token owner)
+)
+
+(define-read-only (spendable-balance-of (owner principal))
+  (ft-get-balance stacks-loans-token owner)
+)
+
+(define-read-only (get-spendable-in-bank)
+  (ft-get-balance stacks-loans-token (as-contract tx-sender))
+)
+
+(define-read-only (get-hodl-in-bank)
+  (ft-get-balance stacks-loans-hodl-token (as-contract tx-sender))
+)
+
+(define-private (mint (account principal) (amount uint))
+    (begin
+      (unwrap-panic (ft-mint? stacks-loans-token amount account))
+      (unwrap-panic (ft-mint? stacks-loans-hodl-token amount (as-contract tx-sender)))
+      (ok amount)))
+
+(define-public (buy-tokens (amount uint))
+  (begin
+    (unwrap-panic (stx-transfer? amount tx-sender 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK))
+    (mint tx-sender amount)
+  )
+)
+
+;; Initialize the contract
+(begin
+  (mint 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK u990000)
+)`;
+
+
+            const transaction = await makeContractDeploy({
+                contractName: CONTRACT_NAME,
+                codeBody,
+                senderKey: PRIVATE_KEY,
+                network,
+            });
+            console.log("transaction:", transaction);
+
+            const result = await broadcastTransaction(transaction, network);
+            
+            console.log("result 1:", result );
+            if (result && result.error ) {
+                if (result.reason === "ContractAlreadyExists") {
+                    return "TxBroadcastResultOk";
+                } else {
+                    throw new Error(
+                        `failed to deploy ${CONTRACT_NAME}: ${JSON.stringify(result)}`
+                    );
+                }
+            }
+            const processed = await processing("0x"+result );
+            console.log("processed 1:", processed );
+            if (!processed) {
+                throw new Error(`failed to deploy ${CONTRACT_NAME}: transaction not found`);
+            }
+            console.log("TxBroadcastResultOk");
+
+
+        } catch (error) {
+
+            console.log("error :", error);
+        }
+    };
+
     return (
         <div>
 
@@ -219,7 +359,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                     )}
                 </Card.Body>
             </Card>
-
+            <Button onClick={onDeploy}>onDeploy</Button>
             <Button onClick={onCheckTxn}>Check Transaction</Button>
             <Button onClick={onClick}>Call Contract's Function</Button>
             <Button onClick={checkFunctionCall}>Check If You Won</Button>

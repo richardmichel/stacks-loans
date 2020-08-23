@@ -17,8 +17,10 @@ import { standardPrincipalCV } from '@blockstack/stacks-transactions';
 export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
-export const CONTRACT_ADDRESS = 'ST3FHJFW64EK06MD3X702CMVCB2T4N1WDFMVXV7K6';
-export const CONTRACT_NAME = 'michel-show-address31';
+export const CONTRACT_ADDRESS = 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK';
+export const CONTRACT_NAME = 'my-contract-stacks-loans';
+export const PRIVATE_KEY = '67e885b4a73009361a9537ef00c4257fc6fbb1bee79dda3015c87e0b41089d6a01';
+
 const urlIcon = "https://stacks-loans.herokuapp.com/favicon.ico";
 export const appDetails = {
     name: "Stacks Loans",
@@ -42,7 +44,7 @@ export function getStacksAccount(appPrivateKey) {
 
 export function fetchHodlTokenBalance(sender) {
     //https://sidecar.staging.blockstack.xyz/v2/contracts/call-read/{stacks_address}/{contract_name}/{function_name}
-    let functionName = 'showAddress';//hodl-balance-of
+    let functionName = 'hodl-balance-of';
     let url =`${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/${CONTRACT_NAME}/${functionName}`;
 
     let t = serializeCV(new standardPrincipalCV(sender));

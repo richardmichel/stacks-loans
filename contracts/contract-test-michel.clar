@@ -1,56 +1,64 @@
-
-(define-fungible-token stacks-loans u1)
-(define-fungible-token hodl-stacks-loans u1)
+(define-fungible-token stacks-loans-token u1000000)
+(define-fungible-token stacks-loans-hodl-token u1000000)
 
 (define-public (transfer (recipient principal) (amount uint))
-   (match (ft-transfer? stacks-loans amount tx-sender recipient)
+   (match (ft-transfer? stacks-loans-token amount tx-sender recipient)
     result (ok true)
     error (err false))
 )
+
 (define-public (hodl (amount uint))
   (begin
-    (unwrap-panic (ft-transfer? stacks-loans amount tx-sender (as-contract tx-sender)))
+    (unwrap-panic (ft-transfer? stacks-loans-token amount tx-sender (as-contract tx-sender)))
     (let ((original-sender tx-sender))
-     (ok (unwrap-panic (as-contract (ft-transfer? hodl-stacks-loans amount tx-sender original-sender))))
+     (ok (unwrap-panic (as-contract (ft-transfer? stacks-loans-hodl-token amount tx-sender original-sender))))
     )
   )
 )
+
 (define-public (unhodl (amount uint))
   (begin
-    (print (ft-transfer? hodl-stacks-loans amount tx-sender (as-contract tx-sender)))
+    (print (ft-transfer? stacks-loans-hodl-token amount tx-sender (as-contract tx-sender)))
     (let ((original-sender tx-sender))
-      (print (as-contract (ft-transfer? stacks-loans amount tx-sender original-sender)))
+      (print (as-contract (ft-transfer? stacks-loans-token amount tx-sender original-sender)))
     )
   )
 )
+
 (define-read-only (balance-of (owner principal))
-   (+ (ft-get-balance stacks-loans owner) (ft-get-balance hodl-stacks-loans owner))
+   (+ (ft-get-balance stacks-loans-token owner) (ft-get-balance stacks-loans-hodl-token owner))
 )
+
 (define-read-only (hodl-balance-of (owner principal))
-  (ft-get-balance hodl-stacks-loans owner)
+  (ft-get-balance stacks-loans-hodl-token owner)
 )
+
 (define-read-only (spendable-balance-of (owner principal))
-  (ft-get-balance stacks-loans owner)
+  (ft-get-balance stacks-loans-token owner)
 )
+
 (define-read-only (get-spendable-in-bank)
-  (ft-get-balance stacks-loans (as-contract tx-sender))
+  (ft-get-balance stacks-loans-token (as-contract tx-sender))
 )
+
 (define-read-only (get-hodl-in-bank)
-  (ft-get-balance hodl-stacks-loans (as-contract tx-sender))
+  (ft-get-balance stacks-loans-hodl-token (as-contract tx-sender))
 )
+
 (define-private (mint (account principal) (amount uint))
     (begin
-      (unwrap-panic (ft-mint? stacks-loans amount account))
-      (unwrap-panic (ft-mint? hodl-stacks-loans amount (as-contract tx-sender)))
+      (unwrap-panic (ft-mint? stacks-loans-token amount account))
+      (unwrap-panic (ft-mint? stacks-loans-hodl-token amount (as-contract tx-sender)))
       (ok amount)))
 
 (define-public (buy-tokens (amount uint))
   (begin
-    (unwrap-panic (stx-transfer? amount tx-sender 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8))
+    (unwrap-panic (stx-transfer? amount tx-sender 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK))
     (mint tx-sender amount)
   )
 )
 
+;; Initialize the contract
 (begin
-  (mint 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8 u2)
+  (mint 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK u990000)
 )
