@@ -107,7 +107,7 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
         postConditions: [
           makeStandardSTXPostCondition(
             ownerStxAddress,
-            FungibleConditionCode.Equal,
+            FungibleConditionCode.LessEqual,
             new BigNum(amount)
           ),
         ],
