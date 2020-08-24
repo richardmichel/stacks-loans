@@ -104,13 +104,6 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
         functionName: "get-stx-return",
         functionArgs: [uintCV(amount), uintCV(mounth)],
         postConditionMode: PostConditionMode.Allow,
-        postConditions: [
-          makeStandardSTXPostCondition(
-            ownerStxAddress,
-            FungibleConditionCode.Equal,
-            new BigNum(amount)
-          ),
-        ],
         appDetails,
         finished: (data) => {
           console.log("data setStatus:", data);
