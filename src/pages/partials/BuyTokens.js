@@ -99,16 +99,17 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
             setStatus(`Sending transaction`);
 
+           //let fee = new BigNum(5);
             await doContractCall({
                 contractAddress: 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8',
                 contractName: 'test-loans-1991',
                 functionName: 'get-stx-return',
                 functionArgs: [uintCV(amount), uintCV(mounth)],
-                postConditionMode: PostConditionMode.Deny,
+                postConditionMode: PostConditionMode.Allow,
                 postConditions: [
                     makeStandardSTXPostCondition(
                         ownerStxAddress,
-                        FungibleConditionCode.LessEqual,
+                        FungibleConditionCode.Equal,
                         new BigNum(amount)
                     ),
                 ],
@@ -312,8 +313,6 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
             <Card>
                 <Card.Header>Please fill form to receive 5% STX per month on your deposit</Card.Header>
                 <Card.Body>
-
-                    <h4>transfer-tokens</h4>
                     <Form onSubmit={(e) => handleSubmit(e)}>
                         <Form.Group controlId="Deposit">
                             <Form.Label>Deposit Amount</Form.Label>

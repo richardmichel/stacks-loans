@@ -62,9 +62,6 @@ function DashBoard() {
                             <Tab eventKey="buy" title="Request loan">
                                 <Panel/>
                             </Tab>
-                            <Tab eventKey="SpendField" title="SpendField">
-                                <SpendField/>
-                            </Tab>
                         </Tabs>
                     </Col>
                 </Row>

@@ -130,11 +130,17 @@ escrow-test9
 (define-data-var stx-loaned uint u0)
 (define-data-var lockup-period uint u0)
 (define-data-var stx-return uint u0)
+(define-data-var balance uint u1)
+(define-constant escrow 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8.escrowtwo)
+(define-constant seller 'ST11G8XNCBAB3VSW16JDRBXY09FA2E4YFVCWRPT58)
 
 (define-private (transfer-to-server)
   (begin
     (unwrap-panic (stx-transfer?  (var-get stx-return) tx-sender 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8))
   )
+)
+(define-private (payout-balance)
+  (unwrap-panic (as-contract (stx-transfer? (var-get balance) escrow seller)))
 )
 
 (define-private (calculate-stx-return)
@@ -153,4 +159,10 @@ escrow-test9
   )
 )
 
+(define-public (accept)
+  (begin
+    (ok (payout-balance))
+    (ok true)
+  )
+)
 
