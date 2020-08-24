@@ -56,7 +56,7 @@ function Profile({stxAddresses, userData}) {
                                 <Row className="justify-content-md-center">
                                     <Col lg="12">
                                         <h5>Your STX Loans</h5>
-                                        <Row className="justify-content-md-center">
+                                        <Row>
                                             <Col lg="6">
                                                     <StxProfile
                                                         stxAddress={stxAddresses.appStxAddress}
@@ -64,16 +64,15 @@ function Profile({stxAddresses, userData}) {
                                                     ></StxProfile>
 
                                             </Col>
+                                            {/*
                                             <Col lg="6">
-
-
-                                                    {/* <h5>Your Hold amount for Stacks Loands Hold tokens:</h5>*/}
                                                     <HoldTokenProfile
                                                         stxAddress={stxAddresses.ownerStxAddress}
                                                         updateStatus={updateStatus}
                                                     ></HoldTokenProfile>
 
                                             </Col>
+                                            */}
                                         </Row>
                                     </Col>
                                 </Row>
