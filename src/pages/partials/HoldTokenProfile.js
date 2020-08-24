@@ -22,7 +22,6 @@ function HoldTokenProfile({stxAddress}) {
     return (
         <React.Fragment>
 
-            <p>balanceProfile:</p>
             {balanceProfile.balance && (
                 <React.Fragment>
                     <Row noGutters={false}>

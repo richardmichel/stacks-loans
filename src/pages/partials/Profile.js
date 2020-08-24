@@ -55,7 +55,7 @@ function Profile({stxAddresses, userData}) {
                             <Col lg="8">
                                 <Row className="justify-content-md-center">
                                     <Col lg="12">
-                                        <h5 className="mb-4-5">Your STX Loans</h5>
+                                        <h5>Your STX Loans</h5>
                                         <Row className="justify-content-md-center">
                                             <Col lg="6">
                                                     <StxProfile

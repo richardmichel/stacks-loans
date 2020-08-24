@@ -20,6 +20,7 @@ function StxProfile({stxAddress, updateStatus, showAddress}) {
                 .then(acc => {
 
                     setProfileState({account: acc});
+                    console.log("acc:"+stxAddress, acc);
                     spinner.current.classList.add('d-none');
                 })
                 .catch(e => {

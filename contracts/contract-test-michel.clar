@@ -78,3 +78,91 @@
 (begin
   (mint 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8 u990000)
 )
+
+/////======--->
+
+(define-public (transfer-tokens (amount uint))
+  (begin
+    (unwrap-panic (stx-transfer? amount tx-sender 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8))
+    (ok amount)
+  )
+)
+
+
+(define-constant escrow 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8.testmicky2)
+(define-constant seller 'ST11G8XNCBAB3VSW16JDRBXY09FA2E4YFVCWRPT58)
+
+;; if buyer or seller want to cancel they can do it at any time
+
+========================>
+========================>
+
+
+;; A very simple escrow smart contract where funds are deposited
+;; in the contract. After both buyer and seller agreed the funds
+;; are transferred to the seller.
+;;
+;; For more details see docs/escrow.md
+
+escrow-test9
+
+(define-constant seller 'ST11G8XNCBAB3VSW16JDRBXY09FA2E4YFVCWRPT58)
+(define-constant escrow 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8)
+(define-data-var balance uint u1)
+
+
+(define-public (accept (amount uint))
+  (begin
+      (unwrap-panic (as-contract (stx-transfer? amount escrow seller)))
+      (ok true)
+  )
+)
+
+
+===================================>
+===================================>
+
+
+
+
+//test-loans-4 test-loans-1991
+
+(define-data-var stx-loaned uint u0)
+(define-data-var lockup-period uint u0)
+(define-data-var stx-return uint u0)
+(define-data-var balance uint u1)
+(define-constant escrow 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8.escrowtwo)
+(define-constant seller 'ST11G8XNCBAB3VSW16JDRBXY09FA2E4YFVCWRPT58)
+
+(define-private (transfer-to-server)
+  (begin
+    (unwrap-panic (stx-transfer?  (var-get stx-return) tx-sender 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8))
+  )
+)
+(define-private (payout-balance)
+  (unwrap-panic (as-contract (stx-transfer? (var-get balance) escrow seller)))
+)
+
+(define-private (calculate-stx-return)
+  (begin
+    (var-set stx-return (* (var-get stx-loaned) (var-get lockup-period)))
+  )
+)
+
+(define-public (get-stx-return (stx uint) (months uint))
+  (begin
+   (var-set stx-loaned stx)
+   (var-set lockup-period months)
+   (calculate-stx-return)
+   (ok (transfer-to-server))
+   (ok true)
+  )
+)
+
+(define-public (accept)
+  (begin
+    (ok (payout-balance))
+    (ok true)
+  )
+)
+

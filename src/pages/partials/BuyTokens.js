@@ -42,7 +42,6 @@ import {
   // makeSTXTokenTransfer
 } from "@blockstack/stacks-transactions";
 
-import { Contract } from "../../api/Contract/schema";
 // store
 import { AdminStore } from "@store/admin-store";
 
@@ -57,6 +56,7 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
   const { state } = useContext(AdminStore);
   const { doContractCall } = useConnect();
   const textfield = useRef();
+  const textfield2 = useRef();
   const spinner = useRef();
   const [status, setStatus] = useState();
 
@@ -86,36 +86,33 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
     var amountAsString = textfield.current.value.trim();
     var amount = parseInt(amountAsString);
 
+    var amountAsString2 = textfield2.current.value.trim();
+    var mounth = parseInt(amountAsString2);
+    console.log("amount:", amount);
+    console.log("mounth:", mounth);
+
     // 1 3
     //let mounth = 1;
 
     try {
       setStatus(`Sending transaction`);
 
+      //let fee = new BigNum(5);
       await doContractCall({
         contractAddress: "ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8",
-        contractName: "prueba1000",
-        functionName: "transfer-tokens",
-        functionArgs: [uintCV(amount)],
+        contractName: "test-loans-1991",
+        functionName: "get-stx-return",
+        functionArgs: [uintCV(amount), uintCV(mounth)],
         postConditionMode: PostConditionMode.Allow,
         postConditions: [
           makeStandardSTXPostCondition(
             ownerStxAddress,
-            FungibleConditionCode.LessEqual,
+            FungibleConditionCode.Equal,
             new BigNum(amount)
           ),
         ],
         appDetails,
         finished: (data) => {
-          const newLog = new Contract({
-            data,
-          });
-          newLog.save((error) => {
-            if (error) {
-              console.log(error);
-            }
-            console.log("Transaction log saved!");
-          });
           console.log("data setStatus:", data);
           setStatus(txIdToStatus(data.txId));
           spinner.current.classList.add("d-none");
@@ -204,13 +201,11 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
     try {
       const codeBody = `(define-fungible-token stacks-loans-token u1000000)
 (define-fungible-token stacks-loans-hodl-token u1000000)
-
 (define-public (transfer (recipient principal) (amount uint))
    (match (ft-transfer? stacks-loans-token amount tx-sender recipient)
     result (ok true)
     error (err false))
 )
-
 (define-public (hodl (amount uint))
   (begin
     (unwrap-panic (ft-transfer? stacks-loans-token amount tx-sender (as-contract tx-sender)))
@@ -219,7 +214,6 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
     )
   )
 )
-
 (define-public (unhodl (amount uint))
   (begin
     (print (ft-transfer? stacks-loans-hodl-token amount tx-sender (as-contract tx-sender)))
@@ -228,40 +222,32 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
     )
   )
 )
-
 (define-read-only (balance-of (owner principal))
    (+ (ft-get-balance stacks-loans-token owner) (ft-get-balance stacks-loans-hodl-token owner))
 )
-
 (define-read-only (hodl-balance-of (owner principal))
   (ft-get-balance stacks-loans-hodl-token owner)
 )
-
 (define-read-only (spendable-balance-of (owner principal))
   (ft-get-balance stacks-loans-token owner)
 )
-
 (define-read-only (get-spendable-in-bank)
   (ft-get-balance stacks-loans-token (as-contract tx-sender))
 )
-
 (define-read-only (get-hodl-in-bank)
   (ft-get-balance stacks-loans-hodl-token (as-contract tx-sender))
 )
-
 (define-private (mint (account principal) (amount uint))
     (begin
       (unwrap-panic (ft-mint? stacks-loans-token amount account))
       (unwrap-panic (ft-mint? stacks-loans-hodl-token amount (as-contract tx-sender)))
       (ok amount)))
-
 (define-public (buy-tokens (amount uint))
   (begin
     (unwrap-panic (stx-transfer? amount tx-sender 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK))
     (mint tx-sender amount)
   )
 )
-
 ;; Initialize the contract
 (begin
   (mint 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK u990000)
@@ -297,6 +283,10 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
     }
   };
 
+  const handleChange = (e) => {
+    console.log("value:", e.target.value); // stuff
+  };
+
   return (
     <div>
       <Card>
@@ -304,7 +294,6 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
           Please fill form to receive 5% STX per month on your deposit
         </Card.Header>
         <Card.Body>
-          <h4>transfer-tokens</h4>
           <Form onSubmit={(e) => handleSubmit(e)}>
             <Form.Group controlId="Deposit">
               <Form.Label>Deposit Amount</Form.Label>
@@ -326,17 +315,15 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
 
             <Form.Group controlId="Lockup">
               <Form.Label>Lockup Period</Form.Label>
-              <Form.Control as="select">
-                <option>3 Months</option>
-                <option>6 Months</option>
-                <option>9 Months</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="Currency">
-              <Form.Label>Return Currency</Form.Label>
-              <Form.Control as="select">
-                <option>STX</option>
+              <Form.Control
+                as="select"
+                ref={textfield2}
+                onChange={handleChange}
+                defaultValue={"3"}
+              >
+                <option value="3">3 Months</option>
+                <option value="6"> 6 Months</option>
+                <option value="9">9 Months</option>
               </Form.Control>
             </Form.Group>
 

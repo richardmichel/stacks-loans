@@ -2,7 +2,14 @@ import * as React from 'react';
 import { Row, Col, Container, Tabs, Tab} from 'react-bootstrap';
 import { getStacksAccount } from '@pages/partials/StacksAccount';
 //
-import { addressToString } from '@blockstack/stacks-transactions';
+import {
+    addressFromPublicKeys,
+    AddressHashMode,
+    addressToString,
+    AddressVersion,
+    getPublicKey,
+    addressFromHashMode
+} from '@blockstack/stacks-transactions';
 // store
 import {AdminStore} from "@store/admin-store";
 //
@@ -20,9 +27,20 @@ function DashBoard() {
     const decentralizedID = userData.decentralizedID;
     const { address } = getStacksAccount(userData.appPrivateKey);
     const appStxAddress = addressToString(address);
+    console.log("addressaddressaddressaddressaddressaddressaddress:", address);///160
+    console.log("userData:", userData);
     const ownerStxAddress = userData.profile.stxAddress;
+    //const address2 = addressToString();
+   // console.log("address22:", address2);
 
+
+        const selectedUserPublicKey = userData.profile.appsMeta["https://testnet-explorer.blockstack.org"].publicKey;
+        console.log("selectedUserPublicKey", selectedUserPublicKey);
+
+    // "0254eff4e6b7df994d352fe6612d06773d4d5d070f1f473696cb26c1aafd63033f"
     useEffect(()=>{
+
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -43,9 +61,6 @@ function DashBoard() {
                             </Tab>
                             <Tab eventKey="buy" title="Request loan">
                                 <Panel/>
-                            </Tab>
-                            <Tab eventKey="SpendField" title="SpendField">
-                                <SpendField/>
                             </Tab>
                         </Tabs>
                     </Col>
