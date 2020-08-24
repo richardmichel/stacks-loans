@@ -42,6 +42,7 @@ import {
   // makeSTXTokenTransfer
 } from "@blockstack/stacks-transactions";
 
+import { Contract } from "../../api/Contract/schema";
 // store
 import { AdminStore } from "@store/admin-store";
 
@@ -106,6 +107,15 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
         ],
         appDetails,
         finished: (data) => {
+          const newLog = new Contract({
+            data,
+          });
+          newLog.save((error) => {
+            if (error) {
+              console.log(error);
+            }
+            console.log("Transaction log saved!");
+          });
           console.log("data setStatus:", data);
           setStatus(txIdToStatus(data.txId));
           spinner.current.classList.add("d-none");
