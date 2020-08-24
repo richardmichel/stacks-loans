@@ -34,6 +34,7 @@ export const STACKS_API_ACCOUNTS_URL = `${STACK_API_URL}/v2/accounts`;
 export function getStacksAccount(appPrivateKey) {
     const privateKey = createStacksPrivateKey(appPrivateKey);
     const publicKey = getPublicKey(privateKey);
+    console.log("publicKey:", publicKey);
     const address = addressFromPublicKeys(
         AddressVersion.TestnetSingleSig,
         AddressHashMode.SerializeP2PKH,
@@ -78,7 +79,8 @@ export function fetchHodlTokenBalance(sender) {
 export function fetchAccount(addressAsString) {
     const balanceUrl = `${STACKS_API_ACCOUNTS_URL}/${addressAsString}`;
     return fetch(balanceUrl).then(r => {
-        console.log({r});
+        console.log("r "+addressAsString);
+        console.log(r);
         return r.json();
     });
 }

@@ -27,9 +27,12 @@ export default function App(props) {
     redirectTo: "/",
     finished: ({ userSession }) => {
       const userData = userSession.loadUserData();
+      console.log("userData:", userData);
       setLogin(userData, dispatch);
       const { address } = getStacksAccount(userData.appPrivateKey);
       putStxAddress(userSession, addressToString(address));
+
+      console.log("putStxAddress addressToString :", address);
       //document.location = '/';
     },
     userSession,

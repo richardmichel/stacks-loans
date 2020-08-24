@@ -43,7 +43,6 @@ import {AdminStore} from "@store/admin-store";
 const BigNum = require('bn.js');
 
 
-
 const STACKS_API_URL = "https://sidecar.staging.blockstack.xyz";
 const SIDECAR_API_URL = "https://sidecar.staging.blockstack.xyz";
 const network = new StacksTestnet();
@@ -55,6 +54,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
     const {state} = useContext(AdminStore);
     const {doContractCall} = useConnect();
     const textfield = useRef();
+    const textfield2 = useRef();
     const spinner = useRef();
     const [status, setStatus] = useState();
 
@@ -87,6 +87,11 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
         var amountAsString = textfield.current.value.trim();
         var amount = parseInt(amountAsString);
 
+        var amountAsString2 = textfield2.current.value.trim();
+        var mounth = parseInt(amountAsString2);
+        console.log("amount:", amount);
+        console.log("mounth:", mounth);
+
         // 1 3
         //let mounth = 1;
 
@@ -96,10 +101,10 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
             await doContractCall({
                 contractAddress: 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8',
-                contractName:  'prueba1000',
-                functionName: 'transfer-tokens',
-                functionArgs: [uintCV(amount)],
-                postConditionMode: PostConditionMode.Deny,
+                contractName: 'test-loans-1991',
+                functionName: 'get-stx-return',
+                functionArgs: [uintCV(amount), uintCV(mounth)],
+                postConditionMode: PostConditionMode.Allow,
                 postConditions: [
                     makeStandardSTXPostCondition(
                         ownerStxAddress,
@@ -125,7 +130,6 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
     };
 
 
-
     const onClick = async () => {
 
         const callOptions = {
@@ -149,7 +153,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
     //const authOrigin = 'https://app.blockstack.org';
     const checkFunctionCall = () => {
-        if(!callTxID){
+        if (!callTxID) {
             alert("callTxID is empty");
             return true;
         }
@@ -173,10 +177,10 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
     };
 
     //-->
-    const  timeout =(ms) => {
+    const timeout = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
     };
-    const processing = async(tx, count = 0)=>{
+    const processing = async (tx, count = 0) => {
         try {
             let result = await fetch(
                 `${SIDECAR_API_URL}/sidecar/v1/tx/${tx}`//.substr(1, tx.length - 2)
@@ -192,7 +196,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
             const holdDown = await timeout(10000);
             return processing(tx, count + 1);
-        }catch(error){
+        } catch (error) {
             console.log("error processing:", processing);
         }
     }
@@ -276,7 +280,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
             const result = await broadcastTransaction(transaction, network);
 
-            if (result && result.error ) {
+            if (result && result.error) {
                 if (result.reason === "ContractAlreadyExists") {
                     return "TxBroadcastResultOk";
                 } else {
@@ -285,7 +289,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                     );
                 }
             }
-            const processed = await processing("0x"+result );
+            const processed = await processing("0x" + result);
             if (!processed) {
                 throw new Error(`failed to deploy ${CONTRACT_NAME}: transaction not found`);
             }
@@ -296,6 +300,10 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
             console.log("error :", error);
         }
+    };
+
+    const handleChange = (e) => {
+        console.log("value:", e.target.value); // stuff
     };
 
     return (
@@ -328,20 +336,13 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
                         <Form.Group controlId="Lockup">
                             <Form.Label>Lockup Period</Form.Label>
-                            <Form.Control as="select">
-                                <option>3 Months</option>
-                                <option>6 Months</option>
-                                <option>9 Months</option>
+                            <Form.Control as="select"  ref={textfield2} onChange={handleChange} defaultValue={'3'}>
+                                <option value="3">3 Months</option>
+                                <option value="6"> 6 Months</option>
+                                <option value="9">9 Months</option>
                             </Form.Control>
                         </Form.Group>
 
-
-                        <Form.Group controlId="Currency">
-                            <Form.Label>Return Currency</Form.Label>
-                            <Form.Control as="select">
-                                <option>STX</option>
-                            </Form.Control>
-                        </Form.Group>
 
                         <Button variant="primary" type="submit">
                             <div
@@ -353,8 +354,6 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                         </Button>
 
                     </Form>
-
-
 
 
                     {status && (
