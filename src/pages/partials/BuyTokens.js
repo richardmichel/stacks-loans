@@ -104,7 +104,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                 contractName: 'test-loans-1991',
                 functionName: 'get-stx-return',
                 functionArgs: [uintCV(amount), uintCV(mounth)],
-                postConditionMode: PostConditionMode.Allow,
+                postConditionMode: PostConditionMode.Deny,
                 postConditions: [
                     makeStandardSTXPostCondition(
                         ownerStxAddress,
