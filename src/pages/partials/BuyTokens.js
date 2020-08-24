@@ -42,9 +42,9 @@ import {
   // makeSTXTokenTransfer
 } from "@blockstack/stacks-transactions";
 
-import { Contract } from "../../api/Contract/schema";
 // store
 import { AdminStore } from "@store/admin-store";
+import { httpResource } from "@services/http";
 
 const BigNum = require("bn.js");
 
@@ -107,18 +107,22 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
         ],
         appDetails,
         finished: (data) => {
-          const newLog = new Contract({
-            data,
-          });
-          newLog.save((error) => {
-            if (error) {
-              console.log(error);
-            }
-            console.log("Transaction log saved!");
-          });
-          console.log("data setStatus:", data);
+          console.log("data setStatus:", { data });
           setStatus(txIdToStatus(data.txId));
           spinner.current.classList.add("d-none");
+
+          httpResource.post(`stackloan/contract`, data);
+          /*fetch("http://192.168.100.8:4000/stackloan/contract", {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: `{"data":"${data}"}`,
+          })
+            .then((res) => res.json())
+            .catch((error) => console.error("Error:", error))
+            .then((response) => console.log("Success:", response));*/
         },
       });
     } catch (e) {

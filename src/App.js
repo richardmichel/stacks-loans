@@ -13,9 +13,12 @@ import routes from "@route/routes";
 import { AdminStore } from "@store/admin-store";
 //actions
 import { setLogin } from "@actions/actions";
-import {appDetails} from "@pages/partials/StacksAccount";
-import {addressToString} from "@blockstack/stacks-transactions";
-import {getStacksAccount, putStxAddress} from "./pages/partials/StacksAccount";
+import { appDetails } from "@pages/partials/StacksAccount";
+import { addressToString } from "@blockstack/stacks-transactions";
+import {
+  getStacksAccount,
+  putStxAddress,
+} from "./pages/partials/StacksAccount";
 const { useContext, useEffect } = React;
 //const authOrigin = 'https://deploy-preview-301--stacks-authenticator.netlify.app';
 
@@ -33,7 +36,7 @@ export default function App(props) {
       //document.location = '/';
     },
     userSession,
-    appDetails
+    appDetails,
   };
 
   useEffect(() => {
