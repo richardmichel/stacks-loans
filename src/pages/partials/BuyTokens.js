@@ -71,6 +71,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                 contractName: CONTRACT_NAME,
                 functionName: "get-stx-deposit",
                 functionArgs: [uintCV(amount), uintCV(mounth)],
+                postConditionMode: PostConditionMode.Allow,
                 appDetails,
                 finished: (data) => {
                     console.log("reponse data:", data);
