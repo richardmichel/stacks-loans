@@ -13,7 +13,7 @@ export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
 export const CONTRACT_ADDRESS = 'ST1618RD5WAQMGNX4KQ4KBWBGP0X59BT5P324DB1S';
-export const CONTRACT_NAME = 'stacks-loan-1';
+export const CONTRACT_NAME = 'stacks-loans-2';
 
 const urlIcon = "https://stacks-loans.herokuapp.com/favicon.ico";
 export const appDetails = {
