@@ -1,16 +1,10 @@
 import React, { useState} from 'react';
-
 import {Card,  Button, Row, Col, Alert} from 'react-bootstrap';
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faMoneyCheckAlt} from "@fortawesome/free-solid-svg-icons";
-
-
-import HoldTokenProfile from "@pages/partials/HoldTokenProfile";
 import StxProfile from "@pages/partials/StxProfile";
 
 function Profile({stxAddresses, userData}) {
-    //const {profile, username} = userData;
     const [status, setStatus] = useState('');
     const updateStatus = status => {
         setStatus(status);
@@ -64,15 +58,7 @@ function Profile({stxAddresses, userData}) {
                                                     ></StxProfile>
 
                                             </Col>
-                                            {/*
-                                            <Col lg="6">
-                                                    <HoldTokenProfile
-                                                        stxAddress={stxAddresses.ownerStxAddress}
-                                                        updateStatus={updateStatus}
-                                                    ></HoldTokenProfile>
 
-                                            </Col>
-                                            */}
                                         </Row>
                                     </Col>
                                 </Row>
