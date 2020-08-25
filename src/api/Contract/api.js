@@ -3,8 +3,7 @@ import { saveTransaction } from "./Contract";
 const router = express.Router();
 
 router.post("/contract", (req, res, next) => {
-  const { data } = req.body;
-  console.log("Data ", data);
+  const data = req.body;
   saveTransaction(data, (data, error = false) => {
     if (error) {
       res.json({

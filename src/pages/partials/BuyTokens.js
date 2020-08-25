@@ -38,7 +38,6 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
 
   const saveContract = async (payload) => {
     try {
-      console.log(">>>>>>>> " + payload);
       const response = await UserService.saveContract(payload);
       if (response && response.status === 200) {
       }
