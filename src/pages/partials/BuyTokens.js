@@ -48,7 +48,7 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
         } catch (error) {
             console.log(error);
-            return Promise.reject(response);
+            return Promise.reject(error);
         }
     };
 
