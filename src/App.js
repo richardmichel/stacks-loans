@@ -48,11 +48,11 @@ export default function App(props) {
             setLogin(userData, dispatch);
             const {address} = getStacksAccount(userData.appPrivateKey);
             putStxAddress(userSession, addressToString(address));
-            saveUser(userData.username)
+            /*saveUser(userData.username)
                 .then(response => {
                     document.location = '/';
                 })
-                .catch(error => console.log(error));
+                .catch(error => console.log(error));*/
         },
         userSession,
         appDetails

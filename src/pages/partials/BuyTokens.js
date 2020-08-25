@@ -7,12 +7,16 @@ import {
     uintCV,
     PostConditionMode
 } from "@blockstack/stacks-transactions";
+import {
+    FungibleConditionCode,
+    makeContractSTXPostCondition
+} from "@blockstack/stacks-transactions";
 
 // services
 import {ServiceFactory} from '@services/ServiceFactory';
 const UserService = ServiceFactory.get('user');
 
-
+const BigNum = require("bn.js");
 export function BuyTokens({placeholder, ownerStxAddress}) {
 
     const {doContractCall} = useConnect();
@@ -56,18 +60,18 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
 
         try {
             setStatus(`Sending transaction`);
+            const price = 0x1000;
             await doContractCall({
                 contractAddress: CONTRACT_ADDRESS,
                 contractName: CONTRACT_NAME,
-                functionName: "get-stx-return",
+                functionName: "get-stx-deposit",
                 functionArgs: [uintCV(amount), uintCV(mounth)],
-                postConditionMode: PostConditionMode.Allow,
                 appDetails,
                 finished: (data) => {
                     console.log("reponse data:", data);
                     setStatus(txIdToStatus(data.txId));
                     spinner.current.classList.add("d-none");
-                    saveContract(data).catch(error=>console.log(error));
+                    //saveContract(data).catch(error=>console.log(error));
                 },
             });
         } catch (e) {
