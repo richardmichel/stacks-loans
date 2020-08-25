@@ -14,9 +14,11 @@ import {
 
 // services
 import {ServiceFactory} from '@services/ServiceFactory';
+
 const UserService = ServiceFactory.get('user');
 
 const BigNum = require("bn.js");
+
 export function BuyTokens({placeholder, ownerStxAddress}) {
 
     const {doContractCall} = useConnect();
@@ -42,9 +44,11 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
             const response = await UserService.saveContract(payload);
             if (response && response.status == 200) {
             }
+            return Promise.resolve(response)
 
         } catch (error) {
             console.log(error);
+            return Promise.reject(response);
         }
     };
 
@@ -72,7 +76,12 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                     console.log("reponse data:", data);
                     setStatus(txIdToStatus(data.txId));
                     spinner.current.classList.add("d-none");
-                    saveContract(data).catch(error=>console.log(error));
+                        saveContract(data)
+                            .then((response) => {
+                                console.log("success:", response)
+                            }).catch((error) => {
+                            console.log(error)
+                        });
                 },
             });
         } catch (e) {
@@ -80,9 +89,9 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
             spinner.current.classList.add("d-none");
         }
     };
-  const handleChange = (e) => {
+    const handleChange = (e) => {
 
-  };
+    };
 
     return (
         <div>
