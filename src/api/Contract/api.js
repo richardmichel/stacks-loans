@@ -3,11 +3,9 @@ import { saveTransaction } from "./Contract";
 const router = express.Router();
 
 router.post("/contract", (req, res, next) => {
-  console.log("********* CONTRACT ************");
   const { data } = req.body;
-  console.log("*****************************");
-  console.log(req.body);
-  /*saveTransaction(data, (data, error = false) => {
+  console.log("Data ", data);
+  saveTransaction(data, (data, error = false) => {
     if (error) {
       res.json({
         error: true,
@@ -21,7 +19,7 @@ router.post("/contract", (req, res, next) => {
         },
       });
     }
-  });*/
+  });
 });
 
 module.exports = router;

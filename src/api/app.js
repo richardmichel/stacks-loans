@@ -29,7 +29,8 @@ app.use((req, res, next) => {
 
 // Mongoose Connection
 try {
-  const database_url = "mongodb://mongoadmin:7bpqpny4r@localhost:27017";
+  const database_url =
+    "mongodb+srv://mongoadmin:s3cr3t@cluster0.8yefw.gcp.mongodb.net/stack-loan?retryWrites=true&w=majority";
   mongoose.connect(database_url, {
     useCreateIndex: true,
     useNewUrlParser: true,

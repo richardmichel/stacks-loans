@@ -38,11 +38,14 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
 
   const saveContract = async (payload) => {
     try {
+      console.log(">>>>>>>> " + payload);
       const response = await UserService.saveContract(payload);
-      if (response && response.status == 200) {
+      if (response && response.status === 200) {
       }
+      return Promise.resolve(response);
     } catch (error) {
       console.log(error);
+      return Promise.reject(error);
     }
   };
 
@@ -69,7 +72,11 @@ export function BuyTokens({ placeholder, ownerStxAddress }) {
           console.log("reponse data:", data);
           setStatus(txIdToStatus(data.txId));
           spinner.current.classList.add("d-none");
-          saveContract(data).catch((error) => console.log(error));
+          saveContract(data)
+            .then((response) => {
+              console.log("sucess", response);
+            })
+            .catch((error) => console.log(error));
         },
       });
     } catch (e) {
