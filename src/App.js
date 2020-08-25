@@ -19,12 +19,28 @@ import {
   getStacksAccount,
   putStxAddress,
 } from "./pages/partials/StacksAccount";
+
+// services
+import { ServiceFactory } from "@services/ServiceFactory";
+const UserService = ServiceFactory.get("user");
+
 const { useContext, useEffect } = React;
-//const authOrigin = 'https://deploy-preview-301--stacks-authenticator.netlify.app';
 
 export default function App(props) {
   const { state, dispatch } = useContext(AdminStore);
   const { userSession } = state;
+
+  const saveUser = async (username) => {
+    try {
+      const response = await UserService.store({
+        username: username,
+      });
+      if (response && response.status == 200) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const authOptions = {
     redirectTo: "/",
@@ -33,7 +49,11 @@ export default function App(props) {
       setLogin(userData, dispatch);
       const { address } = getStacksAccount(userData.appPrivateKey);
       putStxAddress(userSession, addressToString(address));
-      //document.location = '/';
+      saveUser(userData.username)
+        .then((response) => {
+          document.location = "/";
+        })
+        .catch((error) => console.log(error));
     },
     userSession,
     appDetails,

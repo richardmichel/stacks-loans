@@ -11,7 +11,6 @@ export default function About() {
                     </Col>
                 </Row>
             </Container>
-
         </React.Fragment>
     );
 }

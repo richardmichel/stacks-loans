@@ -9,4 +9,7 @@ export default {
     store(payload) {
         return httpResource.post(`${resource}/user`, payload);
     },
+    saveContract(payload){
+        return httpResource.post(`${resource}/contract`, payload);
+    }
 }

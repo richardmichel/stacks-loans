@@ -5,22 +5,15 @@ import {
     addressFromPublicKeys,
     AddressVersion,
     AddressHashMode,
-    StacksTestnet,
-    deserializeCV,
-    serializeCV,
-    addressToString
+    StacksTestnet
 } from '@blockstack/stacks-transactions';
-
-import {standardPrincipalCV} from '@blockstack/stacks-transactions';
-
 //stxAddress sender
 const STX_JSON_PATH = 'stacksloans.json';
 export const NETWORK = new StacksTestnet();
 NETWORK.coreApiUrl = 'https://sidecar.staging.blockstack.xyz';
 
-export const CONTRACT_ADDRESS = 'ST0EE1X0X7PHZHEE0A2N845FT568G0VMK4QX01XK';
-export const CONTRACT_NAME = 'my-contract-stacks-loans';
-export const PRIVATE_KEY = '67e885b4a73009361a9537ef00c4257fc6fbb1bee79dda3015c87e0b41089d6a01';
+export const CONTRACT_ADDRESS = 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8';
+export const CONTRACT_NAME = 'escrowtwo';
 
 const urlIcon = "https://stacks-loans.herokuapp.com/favicon.ico";
 export const appDetails = {
@@ -34,6 +27,7 @@ export const STACKS_API_ACCOUNTS_URL = `${STACK_API_URL}/v2/accounts`;
 export function getStacksAccount(appPrivateKey) {
     const privateKey = createStacksPrivateKey(appPrivateKey);
     const publicKey = getPublicKey(privateKey);
+
     const address = addressFromPublicKeys(
         AddressVersion.TestnetSingleSig,
         AddressHashMode.SerializeP2PKH,
@@ -43,42 +37,11 @@ export function getStacksAccount(appPrivateKey) {
     return {privateKey, address};
 }
 
-export function fetchHodlTokenBalance(sender) {
-    //https://sidecar.staging.blockstack.xyz/v2/contracts/call-read/{stacks_address}/{contract_name}/{function_name}
-    let functionName = 'hodl-balance-of';
-    let url = `${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/${CONTRACT_NAME}/${functionName}`;
 
-    let t = serializeCV(new standardPrincipalCV(sender));
-    let converted = "0x".concat(t.toString("hex"));
-    return fetch(
-        url,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: `{"sender":"${sender}","arguments":["${converted}"]}`,
-        }
-    )
-        .then(response => response.json())
-        .then(hodlBalanceOf => {
-            console.log({hodlBalanceOf});
-            if (hodlBalanceOf.okay) {
-                const cv = deserializeCV(Buffer.from(hodlBalanceOf.result.substr(2), 'hex'));
-                if (cv.value) {
-                    return cv.value;
-                } else {
-                    return undefined;
-                }
-            }
-        });
-
-}
 
 export function fetchAccount(addressAsString) {
     const balanceUrl = `${STACKS_API_ACCOUNTS_URL}/${addressAsString}`;
     return fetch(balanceUrl).then(r => {
-        console.log({r});
         return r.json();
     });
 }
@@ -101,7 +64,7 @@ export const getUserAddress = async (userSession, username) => {
     };
 
     let data = {};
-    console.log("getUserAddress userSession:", userSession);
+
     try {
 
         const fileContents = await userSession.getFile(STX_JSON_PATH, options);
@@ -114,24 +77,9 @@ export const getUserAddress = async (userSession, username) => {
 
         }
     } catch (error) {
-        console.log("getUserAddress: ", error);
-        console.log("getUserAddress username: ", username);
         return false;
     }
 
-  /*  return userSession
-        .getFile(STX_JSON_PATH, {
-            decrypt: false,
-            username: username,
-        })
-        .then(r => {
-            console.log("rrrr:", r);
-            JSON.parse(r)
-        })
-        .catch(e => {
-            console.log("getUserAddress: ", e);
-            console.log("getUserAddress username: ", username);
-        });*/
 }
 
 
@@ -143,40 +91,11 @@ export function resultToStatus(result) {
         return result;
     }
 }
-
-/*
-export function fetchJackpot(sender) {
-  return fetch(
-    `${NETWORK.coreApiUrl}/v2/contracts/call-read/${CONTRACT_ADDRESS}/flip-coin-jackpot/get-jackpot`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: `{"sender":"${sender}","arguments":[]}`,
-    }
-  )
-    .then(response => response.json())
-    .then(getJackpot => {
-      console.log({ getJackpot });
-      if (getJackpot.okay) {
-        const cv = deserializeCV(Buffer.from(getJackpot.result.substr(2), 'hex'));
-        if (cv.value) {
-          return cv.value;
-        } else {
-          return undefined;
-        }
-      }
-    });
-}*/
-
 // Gaia
 
 function afterSTXAddressPublished() {
-    console.log('STX address published');
     stxAddressSemaphore.putting = false;
 }
-
 const stxAddressSemaphore = {putting: false};
 export const putStxAddress = (userSession, address) => {
     if (!stxAddressSemaphore.putting) {

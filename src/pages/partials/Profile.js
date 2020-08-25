@@ -1,16 +1,10 @@
 import React, { useState} from 'react';
-
 import {Card,  Button, Row, Col, Alert} from 'react-bootstrap';
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faMoneyCheckAlt} from "@fortawesome/free-solid-svg-icons";
-
-
-import HoldTokenProfile from "@pages/partials/HoldTokenProfile";
 import StxProfile from "@pages/partials/StxProfile";
 
 function Profile({stxAddresses, userData}) {
-    //const {profile, username} = userData;
     const [status, setStatus] = useState('');
     const updateStatus = status => {
         setStatus(status);
@@ -55,8 +49,8 @@ function Profile({stxAddresses, userData}) {
                             <Col lg="8">
                                 <Row className="justify-content-md-center">
                                     <Col lg="12">
-                                        <h5 className="mb-4-5">Your STX Loans</h5>
-                                        <Row className="justify-content-md-center">
+                                        <h5>Your STX Loans</h5>
+                                        <Row>
                                             <Col lg="6">
                                                     <StxProfile
                                                         stxAddress={stxAddresses.appStxAddress}
@@ -64,16 +58,7 @@ function Profile({stxAddresses, userData}) {
                                                     ></StxProfile>
 
                                             </Col>
-                                            <Col lg="6">
 
-
-                                                    {/* <h5>Your Hold amount for Stacks Loands Hold tokens:</h5>*/}
-                                                    <HoldTokenProfile
-                                                        stxAddress={stxAddresses.ownerStxAddress}
-                                                        updateStatus={updateStatus}
-                                                    ></HoldTokenProfile>
-
-                                            </Col>
                                         </Row>
                                     </Col>
                                 </Row>
