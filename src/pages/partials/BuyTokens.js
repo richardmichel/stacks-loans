@@ -76,12 +76,12 @@ export function BuyTokens({placeholder, ownerStxAddress}) {
                     console.log("reponse data:", data);
                     setStatus(txIdToStatus(data.txId));
                     spinner.current.classList.add("d-none");
-                        saveContract(data)
+                       /* saveContract(data)
                             .then((response) => {
                                 console.log("success:", response)
                             }).catch((error) => {
                             console.log(error)
-                        });
+                        });*/
                 },
             });
         } catch (e) {
