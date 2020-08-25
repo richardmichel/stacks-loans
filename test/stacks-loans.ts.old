@@ -1,5 +1,20 @@
 import { Client, Provider, ProviderRegistry, Result } from "@blockstack/clarity";
+import {
+  makeSmartContractDeploy,
+  makeContractCall,
+  TransactionVersion,
+  FungibleConditionCode,
+  uintCV,
+  ChainID,
+  makeStandardSTXPostCondition,
+  makeContractSTXPostCondition,
+  StacksTestnet,
+  broadcastTransaction,
+} from "@blockstack/stacks-transactions";
 import { assert } from "chai";
+
+const STACKS_API_URL = "http://localhost:20443";
+
 
 describe("stack-loans test suite", () => {
   let stackLoansClient: Client;

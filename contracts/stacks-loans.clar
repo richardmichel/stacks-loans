@@ -1,31 +1,50 @@
-(define-data-var stx-loaned uint u0)
+(define-data-var stx-deposit uint u0)
 (define-data-var lockup-period uint u0)
-(define-data-var stx-return uint u0)
-(define-constant loans-wallet 'ST1618RD5WAQMGNX4KQ4KBWBGP0X59BT5P324DB1S)
-(define-constant test-wallet 'ST2R1XSFXYHCSFE426HP45TTD8ZWV9XHX2SRP3XA8)
+(define-data-var interest uint u0)
+(define-data-var fee uint u5)
 
-(define-public (get-stx-return (stx int) (months int))
+(define-public (get-stx-deposit (stx uint) (months uint))
     (ok
         (begin 
-            (var-set stx-loaned stx)
+            (var-set stx-deposit stx)
             (var-set lockup-period months)
-            (calculate-stx-return)
-            (print (var-get stx-return)) ;; Prints how many stacks they will return.
-            (print tx-sender) ;; Prints who calls contract.
-            (print loans-wallet)
-            (print (stx-get-balance tx-sender)) ;;Prints balance of tx-sender
-            (print (stx-get-balance loans-wallet)) ;;Prints balance of loans-wallet
-            ;;(unwrap-panic (stx-transfer? stx-loaned loans-wallet tx-sender))
-            ;;(unwrap-panic (stx-transfer? u1000 loans-wallet tx-sender))
-            ;;(unwrap-panic (stx-transfer? u1 loans-wallet test-wallet))
+            (calculate-interest)
+            (transfer-to-server)
+            ;;(transfer-to-client)
+            (pay-fee)
         )
     )
 )
 
-(define-private (calculate-stx-return)
+;;Calculation of interest based on 5% of stx-deposit times the lockup period
+(define-private (calculate-interest)
     (ok
         (begin
-            (var-set stx-return (- (+ (* (/ (* (to-int (var-get stx-loaned)) 5) 100) (var-get lockup-period)) (var-get stx-loaned)) 5))
+            (var-set interest (* (/ (* (var-get stx-deposit) u5) u100) (var-get lockup-period)))
         )
     )
+)
+
+;;Transfers from client to server stx-deposit
+(define-private (transfer-to-server)
+  (begin
+    ;;(print (unwrap-panic (stx-transfer? (var-get stx-deposit) tx-sender 'ST1618RD5WAQMGNX4KQ4KBWBGP0X59BT5P324DB1S)))
+    (print (stx-transfer? (var-get stx-deposit) tx-sender 'ST1618RD5WAQMGNX4KQ4KBWBGP0X59BT5P324DB1S))
+    (ok (var-get stx-deposit))
+  )
+)
+
+;;Transfers from server to client interest stx
+;;(define-private (transfer-to-client)
+;;  (begin
+;;    (print (stx-transfer? (var-get interest) 'ST1618RD5WAQMGNX4KQ4KBWBGP0X59BT5P324DB1S tx-sender))
+;;    (ok (var-get interest))
+;;  )
+;;)
+
+(define-private (pay-fee)
+  (begin
+    (print (stx-transfer? (var-get fee) tx-sender 'ST1618RD5WAQMGNX4KQ4KBWBGP0X59BT5P324DB1S))
+    (ok (var-get fee))
+  )
 )
