@@ -50,7 +50,7 @@ export function txIdToStatus(txId) {
     return (
         <>
             Check transaction status:{' '}
-            <a href={`https://testnet-explorer.blockstack.org/txid/0x${txId}`}>{txId}</a>
+            <a href={`https://testnet-explorer.blockstack.org/txid/0x${txId}`} target="_blank">{txId}</a>
         </>
     );
 }
